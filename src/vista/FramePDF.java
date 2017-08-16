@@ -1,9 +1,29 @@
 package vista;
 
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
+import com.itextpdf.text.BadElementException;
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Image;
+import com.itextpdf.text.pdf.BaseFont;
+import com.itextpdf.text.pdf.PdfContentByte;
+import com.itextpdf.text.pdf.PdfReader;
+import com.itextpdf.text.pdf.PdfStamper;
 import java.awt.Component;
+import java.awt.Toolkit;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileFilter;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FilenameFilter;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -15,6 +35,16 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 public class FramePDF extends javax.swing.JFrame {
 
     private JFileChooser fchBuscarFactura;
+    private static String URL = "";
+    static String consecutivos = "";
+    static String compania = "";
+    static String codigoQr ="";
+    
+    /****diseno*****/
+    private static final int qr_image_width = 40;
+    private static final int qr_image_height = 40;
+    private static final String IMAGE_FORMAT = "png";
+    
     
     /** Creates new form FramePDF */
     public FramePDF() {
@@ -55,6 +85,11 @@ public class FramePDF extends javax.swing.JFrame {
         cmbCompania.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccionar Cia" }));
 
         btnGuardar.setText("Guardar");
+        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout pnlBotonesArxLayout = new javax.swing.GroupLayout(pnlBotonesArx);
         pnlBotonesArx.setLayout(pnlBotonesArxLayout);
@@ -149,19 +184,37 @@ public class FramePDF extends javax.swing.JFrame {
         abrirJFileChooser(this);
     }//GEN-LAST:event_btnBuscarFacturaActionPerformed
 
+    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
+        try {
+            // TODO add your handling code here:
+            cargaArchivos();
+        } catch (IOException ex) {
+            Logger.getLogger(FramePDF.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (DocumentException ex) {
+            Logger.getLogger(FramePDF.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (WriterException ex) {
+            Logger.getLogger(FramePDF.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(FramePDF.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnGuardarActionPerformed
+
     private void abrirJFileChooser(Component parent) {
         fchBuscarFactura = new JFileChooser();
         fchBuscarFactura.setDialogTitle("Buscar Facturas");
         fchBuscarFactura.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        fchBuscarFactura.setMultiSelectionEnabled(true);
-        fchBuscarFactura.addChoosableFileFilter(new FileNameExtensionFilter("Factura Formato PDF", "pdf","PDF"));
+        fchBuscarFactura.setMultiSelectionEnabled(true);        
+        fchBuscarFactura.addChoosableFileFilter(new FileNameExtensionFilter("Factura Formato PDF", "pdf","PDF"));        
         fchBuscarFactura.setAcceptAllFileFilterUsed(false);
         
         if (fchBuscarFactura.showOpenDialog(parent) == JFileChooser.APPROVE_OPTION) {
             File[] arx = fchBuscarFactura.getSelectedFile().listFiles((File pathname) -> pathname.toString().endsWith(".pdf") || pathname.toString().endsWith(".PDF"));
             int arxSize = arx.length;
             if (arxSize > 0) {
+                URL = fchBuscarFactura.getSelectedFile().toString();
+                //System.err.println("u "+URL);
                 lblIndicadorArx.setText("Numero de archivos seleccionados: " + arxSize);
+                
             } else {
                 lblIndicadorArx.setText("No se encontraron archivos con la extensión adecuada");
             }
@@ -169,6 +222,126 @@ public class FramePDF extends javax.swing.JFrame {
             System.out.println("NO SELECCIONO");
         }
     }
+    
+    public void cargaArchivos () throws BadElementException, IOException, DocumentException, WriterException, InterruptedException{
+        int hoja[] = new int[100];
+        int ultPag = 0;
+        boolean permiso = false;
+        int vcons;
+        BaseFont bf = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
+        
+        consecutivos = "000000";
+        
+        FilenameFilter filter = new FilenameFilter(){
+        public boolean accept(File dir, String fileName) {
+            return fileName.endsWith("pdf");
+            }
+        };
+        
+        File f=new File(URL);
+        String [] fileList=f.list(filter);
+        
+        for (int i=0; i < fileList.length; i++){ //para los archivos
+            PdfReader reader = new PdfReader(URL+"\\"+fileList[i]);
+                                  
+            /******************* Corte de nombre PDF ***********************/
+            String colores = fileList[i];
+            String[] arrayNombres = colores.split("_");
+
+            // En este momento tenemos un array en el que cada elemento es un color.
+            for (int n = 0; n < arrayNombres.length; n++) {
+                if (n == 0 ){
+                    compania = arrayNombres[n];
+                }
+                System.out.println(arrayNombres[n]);
+            }
+            System.err.println(compania);
+            /**************************************************************/
+            PdfStamper stamper = new PdfStamper(reader, new  FileOutputStream("C:\\temp\\"+fileList[i])) ;
+            for (int pag = 1; pag <= reader.getNumberOfPages(); pag++) { //para las hojas
+                hoja[pag] = pag;
+                if (hoja[pag] > ultPag) {
+                    ultPag = hoja[pag];
+                }
+            }
+                                    
+            for (int pag = 1; pag <= reader.getNumberOfPages(); pag++) {
+                if (pag == ultPag){                 
+                    codigoQr = compania+"-"+consecutivos;
+                    generaQr();
+                    PdfContentByte over = stamper.getOverContent(pag);
+                    
+                    //Imprime Rectangulo
+                    over.setColorStroke(BaseColor.BLACK);
+                    over.setColorFill(BaseColor.WHITE);
+                    over.rectangle(538,5,70,45);
+                    over.fill();
+                    over.stroke();
+                    
+                    //Abre Qr
+                    java.awt.Image awtImage = Toolkit.getDefaultToolkit().createImage("C:\\temp\\codigoQR.png");
+                    Image image = Image.getInstance(awtImage, null);
+                    image.setAbsolutePosition(551, 8);
+                    over.addImage(image);
+                    
+                    //imprime Texto
+                    over.beginText();
+                    over.setColorFill(BaseColor.BLACK);
+                    over.setFontAndSize(bf, 7);    // set font and size
+                    over.setTextMatrix(540, 5);   // set x,y position (0,0 is at the bottom left)
+                    over.showText(codigoQr);  // set text
+                    over.endText();
+                }
+            }
+            vcons = Integer.parseInt(consecutivos);
+            consecutivos =  String.valueOf(vcons+1);
+            if(consecutivos.length() < 6){
+                if (consecutivos.length() == 1){
+                    consecutivos = "00000"+consecutivos;
+                }else if (consecutivos.length() == 2){
+                    consecutivos = "0000"+consecutivos;
+                }else if (consecutivos.length() == 3){
+                    consecutivos = "000"+consecutivos;
+                }else if (consecutivos.length() == 4){
+                    consecutivos = "00"+consecutivos;
+                }else if (consecutivos.length() == 5){
+                    consecutivos = "0"+consecutivos;
+                }
+            }
+            //Thread.sleep (900);
+                        
+            stamper.close();
+            //System.out.println("Ultima Hoja "+fileList[i]+" : " + ultPag);
+            ultPag = 0;    
+        }
+    }
+
+    public static void generaQr() throws WriterException, FileNotFoundException, IOException{        
+        String data = codigoQr;
+ 
+        // Encode URL in QR format
+        BitMatrix matrix;
+        QRCodeWriter writer = new QRCodeWriter();
+        matrix = writer.encode(data, BarcodeFormat.QR_CODE, qr_image_width, qr_image_height);
+ 
+        // Create buffered image to draw to
+        BufferedImage image = new BufferedImage(qr_image_width,qr_image_height, BufferedImage.TYPE_INT_RGB);
+ 
+        // Iterate through the matrix and draw the pixels to the image
+        for (int y = 0; y < qr_image_height; y++) {
+            for (int x = 0; x < qr_image_width; x++) {
+                int grayValue = (matrix.get(x, y) ? 0 : 1) & 0xff;
+                image.setRGB(x, y, (grayValue == 0 ? 0 : 0xFFFFFF));
+            }
+        }
+        String IMG_PATH = "c:/temp/codigoQR.png";
+        // Write the image to a file
+        FileOutputStream qrCode = new FileOutputStream(IMG_PATH);
+        ImageIO.write(image, IMAGE_FORMAT, qrCode);
+        qrCode.close();
+    }
+    
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscarFactura;
