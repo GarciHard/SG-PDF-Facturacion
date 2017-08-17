@@ -35,6 +35,8 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 public class FramePDF extends javax.swing.JFrame {
 
     private JFileChooser fchBuscarFactura;
+    private File[] arx = null;
+    
     private static String URL = "";
     static String consecutivos = "";
     static String compania = "";
@@ -139,8 +141,8 @@ public class FramePDF extends javax.swing.JFrame {
         pnlIndicadorArxLayout.setHorizontalGroup(
             pnlIndicadorArxLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlIndicadorArxLayout.createSequentialGroup()
-                .addContainerGap(385, Short.MAX_VALUE)
-                .addComponent(lblIndicadorArx, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(185, Short.MAX_VALUE)
+                .addComponent(lblIndicadorArx, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
             .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING)
         );
@@ -208,18 +210,21 @@ public class FramePDF extends javax.swing.JFrame {
         fchBuscarFactura.setAcceptAllFileFilterUsed(false);
         
         if (fchBuscarFactura.showOpenDialog(parent) == JFileChooser.APPROVE_OPTION) {
-            File[] arx = fchBuscarFactura.getSelectedFile().listFiles((File pathname) -> pathname.toString().endsWith(".pdf") || pathname.toString().endsWith(".PDF"));
-            int arxSize = arx.length;
-            if (arxSize > 0) {
-                URL = fchBuscarFactura.getSelectedFile().toString();
-                //System.err.println("u "+URL);
-                lblIndicadorArx.setText("Numero de archivos seleccionados: " + arxSize);
-                
+            arx = fchBuscarFactura.getSelectedFile().listFiles((File pathname) -> pathname.toString().endsWith(".pdf") || pathname.toString().endsWith(".PDF"));
+            if (arx != null) {
+                int arxSize = arx.length;
+                if (arxSize > 0) {
+                    URL = fchBuscarFactura.getSelectedFile().toString();
+                    //System.err.println("u "+URL);
+                    lblIndicadorArx.setText("Numero de archivos seleccionados: " + arxSize);
+                } else {
+                    lblIndicadorArx.setText("No se encontraron archivos con la extensión adecuada");
+                }
             } else {
-                lblIndicadorArx.setText("No se encontraron archivos con la extensión adecuada");
+                lblIndicadorArx.setText("La carpeta esta vacía. Código de error: ICO-NPE");
             }
         } else {
-            System.out.println("NO SELECCIONO");
+            lblIndicadorArx.setText("Debe seleccionar una carpeta");
         }
     }
     
