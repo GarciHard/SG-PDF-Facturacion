@@ -12,6 +12,7 @@ import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfStamper;
+import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
@@ -57,21 +58,35 @@ public class FramePDF extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        pnlEdicionArx = new javax.swing.JPanel();
         pnlBackground = new javax.swing.JPanel();
         pnlBotonesArx = new javax.swing.JPanel();
         btnBuscarFactura = new javax.swing.JButton();
         cmbCompania = new javax.swing.JComboBox<>();
         btnGuardar = new javax.swing.JButton();
-        pnlEdicionArx = new javax.swing.JPanel();
         pnlIndicadorArx = new javax.swing.JPanel();
         jSeparator1 = new javax.swing.JSeparator();
         lblIndicadorArx = new javax.swing.JLabel();
         mnuBarra = new javax.swing.JMenuBar();
         mnuEdicion = new javax.swing.JMenu();
-        mniEdicionManual = new javax.swing.JMenuItem();
+        mniEdicionCarpeta = new javax.swing.JMenuItem();
+        mniEdicionArchivo = new javax.swing.JMenuItem();
+
+        pnlEdicionArx.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Visor Factura", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Calibri", 0, 18))); // NOI18N
+        pnlEdicionArx.setPreferredSize(new java.awt.Dimension(700, 500));
+
+        javax.swing.GroupLayout pnlEdicionArxLayout = new javax.swing.GroupLayout(pnlEdicionArx);
+        pnlEdicionArx.setLayout(pnlEdicionArxLayout);
+        pnlEdicionArxLayout.setHorizontalGroup(
+            pnlEdicionArxLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 688, Short.MAX_VALUE)
+        );
+        pnlEdicionArxLayout.setVerticalGroup(
+            pnlEdicionArxLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 468, Short.MAX_VALUE)
+        );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setResizable(false);
 
         pnlBackground.setLayout(new java.awt.BorderLayout());
 
@@ -118,19 +133,6 @@ public class FramePDF extends javax.swing.JFrame {
 
         pnlBackground.add(pnlBotonesArx, java.awt.BorderLayout.PAGE_START);
 
-        javax.swing.GroupLayout pnlEdicionArxLayout = new javax.swing.GroupLayout(pnlEdicionArx);
-        pnlEdicionArx.setLayout(pnlEdicionArxLayout);
-        pnlEdicionArxLayout.setHorizontalGroup(
-            pnlEdicionArxLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 700, Short.MAX_VALUE)
-        );
-        pnlEdicionArxLayout.setVerticalGroup(
-            pnlEdicionArxLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-
-        pnlBackground.add(pnlEdicionArx, java.awt.BorderLayout.CENTER);
-
         jSeparator1.setForeground(new java.awt.Color(0, 0, 0));
 
         lblIndicadorArx.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
@@ -160,8 +162,21 @@ public class FramePDF extends javax.swing.JFrame {
 
         mnuEdicion.setText("Edición");
 
-        mniEdicionManual.setText("Modificar Factura Manual");
-        mnuEdicion.add(mniEdicionManual);
+        mniEdicionCarpeta.setText("Modificar Factura Carpeta");
+        mniEdicionCarpeta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mniEdicionCarpetaActionPerformed(evt);
+            }
+        });
+        mnuEdicion.add(mniEdicionCarpeta);
+
+        mniEdicionArchivo.setText("Modificar Factura Archivo");
+        mniEdicionArchivo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mniEdicionArchivoActionPerformed(evt);
+            }
+        });
+        mnuEdicion.add(mniEdicionArchivo);
 
         mnuBarra.add(mnuEdicion);
 
@@ -201,6 +216,18 @@ public class FramePDF extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnGuardarActionPerformed
 
+    private void mniEdicionArchivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniEdicionArchivoActionPerformed
+        pnlBackground.add(BorderLayout.CENTER, pnlEdicionArx);
+        this.repaint();
+        this.pack();
+    }//GEN-LAST:event_mniEdicionArchivoActionPerformed
+
+    private void mniEdicionCarpetaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniEdicionCarpetaActionPerformed
+        pnlBackground.remove(pnlEdicionArx);
+        this.repaint();
+        this.pack();
+    }//GEN-LAST:event_mniEdicionCarpetaActionPerformed
+
     private void abrirJFileChooser(Component parent) {
         fchBuscarFactura = new JFileChooser();
         fchBuscarFactura.setDialogTitle("Buscar Facturas");
@@ -213,7 +240,7 @@ public class FramePDF extends javax.swing.JFrame {
             arx = fchBuscarFactura.getSelectedFile().listFiles((File pathname) -> pathname.toString().endsWith(".pdf") || pathname.toString().endsWith(".PDF"));
             if (arx != null) {
                 int arxSize = arx.length;
-                if (arxSize > 0) {
+                if (arxSize > 0) {                    
                     URL = fchBuscarFactura.getSelectedFile().toString();
                     //System.err.println("u "+URL);
                     lblIndicadorArx.setText("Numero de archivos seleccionados: " + arxSize);
@@ -354,7 +381,8 @@ public class FramePDF extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> cmbCompania;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JLabel lblIndicadorArx;
-    private javax.swing.JMenuItem mniEdicionManual;
+    private javax.swing.JMenuItem mniEdicionArchivo;
+    private javax.swing.JMenuItem mniEdicionCarpeta;
     private javax.swing.JMenuBar mnuBarra;
     private javax.swing.JMenu mnuEdicion;
     private javax.swing.JPanel pnlBackground;
