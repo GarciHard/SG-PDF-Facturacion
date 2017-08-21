@@ -25,6 +25,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
@@ -36,9 +37,13 @@ public class FramePDF extends javax.swing.JFrame {
 
     private JFileChooser fchBuscarFactura;
     private File[] arx = null;
+    int arxSize = 0;
+    private File f = null;
     
     private static String URL = "";
     static String consecutivos = "";
+    static String vendor = "";
+    static String factura = "";
     static String compania = "";
     static String codigoQr ="";
     
@@ -161,6 +166,11 @@ public class FramePDF extends javax.swing.JFrame {
         mnuEdicion.setText("Edición");
 
         mniEdicionManual.setText("Modificar Factura Manual");
+        mniEdicionManual.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mniEdicionManualActionPerformed(evt);
+            }
+        });
         mnuEdicion.add(mniEdicionManual);
 
         mnuBarra.add(mnuEdicion);
@@ -187,19 +197,22 @@ public class FramePDF extends javax.swing.JFrame {
     }//GEN-LAST:event_btnBuscarFacturaActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        try {
-            // TODO add your handling code here:
-            cargaArchivos();
-        } catch (IOException ex) {
-            Logger.getLogger(FramePDF.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (DocumentException ex) {
-            Logger.getLogger(FramePDF.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (WriterException ex) {
-            Logger.getLogger(FramePDF.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(FramePDF.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        System.err.println(arx);
+        if (arx != null){
+            try {
+                cargaArchivos();
+            } catch (IOException | DocumentException | WriterException | InterruptedException ex) {
+                Logger.getLogger(FramePDF.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "No hay Archivos ");
+        }        
     }//GEN-LAST:event_btnGuardarActionPerformed
+
+    private void mniEdicionManualActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniEdicionManualActionPerformed
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_mniEdicionManualActionPerformed
 
     private void abrirJFileChooser(Component parent) {
         fchBuscarFactura = new JFileChooser();
@@ -212,10 +225,8 @@ public class FramePDF extends javax.swing.JFrame {
         if (fchBuscarFactura.showOpenDialog(parent) == JFileChooser.APPROVE_OPTION) {
             arx = fchBuscarFactura.getSelectedFile().listFiles((File pathname) -> pathname.toString().endsWith(".pdf") || pathname.toString().endsWith(".PDF"));
             if (arx != null) {
-                int arxSize = arx.length;
+                arxSize = arx.length;
                 if (arxSize > 0) {
-                    URL = fchBuscarFactura.getSelectedFile().toString();
-                    //System.err.println("u "+URL);
                     lblIndicadorArx.setText("Numero de archivos seleccionados: " + arxSize);
                 } else {
                     lblIndicadorArx.setText("No se encontraron archivos con la extensión adecuada");
@@ -237,41 +248,34 @@ public class FramePDF extends javax.swing.JFrame {
         
         consecutivos = "000000";
         
-        FilenameFilter filter = new FilenameFilter(){
-        public boolean accept(File dir, String fileName) {
-            return fileName.endsWith("pdf");
-            }
-        };
-        
-        File f=new File(URL);
-        String [] fileList=f.list(filter);
-        
-        for (int i=0; i < fileList.length; i++){ //para los archivos
-            PdfReader reader = new PdfReader(URL+"\\"+fileList[i]);
+        for (int i = 0; i < arxSize; i++){ //para los archivos\
+            PdfReader reader = new PdfReader(arx[i].getPath());
                                   
             /******************* Corte de nombre PDF ***********************/
-            String colores = fileList[i];
-            String[] arrayNombres = colores.split("_");
+            String nombres = arx[i].getName();
+            String[] arrayNombres = nombres.split("_");
 
             // En este momento tenemos un array en el que cada elemento es un color.
             for (int n = 0; n < arrayNombres.length; n++) {
                 if (n == 0 ){
+                    vendor = arrayNombres[n];
+                }else if (n == 1){
+                    factura = arrayNombres[n];
+                }else if(n == 2){
                     compania = arrayNombres[n];
                 }
-                System.out.println(arrayNombres[n]);
             }
-            System.err.println(compania);
             /**************************************************************/
-            PdfStamper stamper = new PdfStamper(reader, new  FileOutputStream("C:\\temp\\"+fileList[i])) ;
-            for (int pag = 1; pag <= reader.getNumberOfPages(); pag++) { //para las hojas
-                hoja[pag] = pag;
+            PdfStamper stamper = new PdfStamper(reader, new  FileOutputStream("C:\\temp\\"+arx[i].getName())) ;
+            //for (int pag = 0; pag <= reader.getNumberOfPages(); pag++) { //para las hojas
+                /*hoja[pag] = pag;
                 if (hoja[pag] > ultPag) {
                     ultPag = hoja[pag];
-                }
-            }
+                }*/
+            //}
                                     
-            for (int pag = 1; pag <= reader.getNumberOfPages(); pag++) {
-                if (pag == ultPag){                 
+            for (int pag = 0; pag <= reader.getNumberOfPages(); pag++) {
+                if (pag == 1){                 
                     codigoQr = compania+"-"+consecutivos;
                     generaQr();
                     PdfContentByte over = stamper.getOverContent(pag);
@@ -313,10 +317,12 @@ public class FramePDF extends javax.swing.JFrame {
                     consecutivos = "0"+consecutivos;
                 }
             }
-            //Thread.sleep (900);
-                        
             stamper.close();
-            //System.out.println("Ultima Hoja "+fileList[i]+" : " + ultPag);
+            // Aqui vamos a insertar en la Base de Dato 
+            
+            
+            ////////////////////////////////////
+            //System.err.println("a: "+i+"u: "+ultPag);
             ultPag = 0;    
         }
     }
@@ -324,7 +330,7 @@ public class FramePDF extends javax.swing.JFrame {
     public static void generaQr() throws WriterException, FileNotFoundException, IOException{        
         String data = codigoQr;
  
-        // Encode URL in QR format
+        // Codifica los datos para el QR
         BitMatrix matrix;
         QRCodeWriter writer = new QRCodeWriter();
         matrix = writer.encode(data, BarcodeFormat.QR_CODE, qr_image_width, qr_image_height);
@@ -346,7 +352,12 @@ public class FramePDF extends javax.swing.JFrame {
         qrCode.close();
     }
     
-    
+    public static void cargarDatos(){
+        Object[] regDatos = new Object[5];
+        
+        regDatos[0] = vendor; 
+        //regDatos[1] = 
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscarFactura;
