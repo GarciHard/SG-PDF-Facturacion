@@ -98,6 +98,7 @@ public class FramePDF extends javax.swing.JFrame {
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         pnlBackground.setLayout(new java.awt.BorderLayout());
 
@@ -426,6 +427,7 @@ public class FramePDF extends javax.swing.JFrame {
         PDFPage page = pdffile.getPage(pagina);
         pnlPDF.useZoomTool(false);
         pnlPDF.showPage(page);
+        pnlPDF.repaint();
     }
 
     private void removePanelPDF() {
