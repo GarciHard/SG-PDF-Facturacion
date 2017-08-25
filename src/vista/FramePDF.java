@@ -78,6 +78,7 @@ public class FramePDF extends javax.swing.JFrame {
         pnlBackground = new javax.swing.JPanel();
         pnlBotonesArx = new javax.swing.JPanel();
         btnBuscarFactura = new javax.swing.JButton();
+        cmbCompania = new javax.swing.JComboBox<>();
         btnGuardar = new javax.swing.JButton();
         pnlIndicadorArx = new javax.swing.JPanel();
         jSeparator1 = new javax.swing.JSeparator();
@@ -115,6 +116,8 @@ public class FramePDF extends javax.swing.JFrame {
             }
         });
 
+        cmbCompania.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccionar Cia" }));
+
         btnGuardar.setText("Guardar");
         btnGuardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -129,7 +132,9 @@ public class FramePDF extends javax.swing.JFrame {
             .addGroup(pnlBotonesArxLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(btnBuscarFactura, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 338, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 89, Short.MAX_VALUE)
+                .addComponent(cmbCompania, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 89, Short.MAX_VALUE)
                 .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -138,6 +143,7 @@ public class FramePDF extends javax.swing.JFrame {
             .addGroup(pnlBotonesArxLayout.createSequentialGroup()
                 .addGroup(pnlBotonesArxLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnBuscarFactura, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cmbCompania, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 8, Short.MAX_VALUE))
         );
@@ -443,6 +449,7 @@ public class FramePDF extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscarFactura;
     private javax.swing.JButton btnGuardar;
+    private javax.swing.JComboBox<String> cmbCompania;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JLabel lblIndicadorArx;
     private javax.swing.JMenuItem mniEdicionArchivo;
