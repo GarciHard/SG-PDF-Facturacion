@@ -32,6 +32,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
@@ -43,6 +44,8 @@ public class FramePDF extends javax.swing.JFrame {
 
     private JFileChooser fchBuscarFactura;
     private File[] arx = null;
+    int arxSize = 0;
+    private File f = null;
     
     private int pagina;
     private int paginas;
@@ -51,6 +54,8 @@ public class FramePDF extends javax.swing.JFrame {
     
     private static String URL = "";
     static String consecutivos = "";
+    static String vendor = "";
+    static String factura = "";
     static String compania = "";
     static String codigoQr ="";
     
@@ -209,19 +214,22 @@ public class FramePDF extends javax.swing.JFrame {
     }//GEN-LAST:event_btnBuscarFacturaActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        try {
-            // TODO add your handling code here:
-            cargaArchivos();
-        } catch (IOException ex) {
-            Logger.getLogger(FramePDF.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (DocumentException ex) {
-            Logger.getLogger(FramePDF.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (WriterException ex) {
-            Logger.getLogger(FramePDF.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(FramePDF.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        System.err.println(arx);
+        if (arx != null){
+            try {
+                cargaArchivos();
+            } catch (IOException | DocumentException | WriterException | InterruptedException ex) {
+                Logger.getLogger(FramePDF.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "No hay Archivos ");
+        }        
     }//GEN-LAST:event_btnGuardarActionPerformed
+
+    private void mniEdicionManualActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniEdicionManualActionPerformed
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_mniEdicionManualActionPerformed
 
     private void mniEdicionArchivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniEdicionArchivoActionPerformed
         abrirJFileChooser(this, JFileChooser.FILES_ONLY);
@@ -247,7 +255,7 @@ public class FramePDF extends javax.swing.JFrame {
             }
 
             if (arx != null) {
-                int arxSize = arx.length;
+                arxSize = arx.length;
                 if (arxSize > 0) {
                     if (opcion == JFileChooser.FILES_ONLY) {
                         try {
@@ -317,7 +325,6 @@ public class FramePDF extends javax.swing.JFrame {
                 if (n == 0) {
                     compania = arrayNombres[n];
                 }
-                System.out.println(arrayNombres[n]);
             }
             System.err.println(compania);
             /**
