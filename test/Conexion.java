@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package db;
+
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -22,8 +22,8 @@ public class Conexion {
     
     private final String driverJDBC = "net.ucanaccess.jdbc.UcanaccessDriver";
     
-    //URL PRUEBA GITHUB
-    private final String urlDB = "jdbc:ucanaccess://" + "src/db/dbFacturas.accdb";
+     private final String urlDB = "jdbc:ucanaccess://" + "C:/Users/PRR1TL/Desktop/dbFacturas.accdb";
+    
     
     public void conectar() throws Exception {
         try {

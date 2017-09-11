@@ -31,6 +31,7 @@ import java.nio.channels.FileChannel;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -53,6 +54,7 @@ public class FramePDF extends javax.swing.JFrame {
     private PDFFile pdffile;
     
     private static String URL = "";
+    static String consecu = "" ;
     static String consecutivos = "";
     static String vendor = "";
     static String factura = "";
@@ -64,6 +66,7 @@ public class FramePDF extends javax.swing.JFrame {
     private static final int qr_image_height = 40;
     private static final String IMAGE_FORMAT = "png";
        
+    private static db.RegistrosDAOImpl registro = new db.RegistrosDAOImpl();
     
     /** Creates new form FramePDF */
     public FramePDF() {
@@ -78,7 +81,6 @@ public class FramePDF extends javax.swing.JFrame {
         pnlBackground = new javax.swing.JPanel();
         pnlBotonesArx = new javax.swing.JPanel();
         btnBuscarFactura = new javax.swing.JButton();
-        cmbCompania = new javax.swing.JComboBox<>();
         btnGuardar = new javax.swing.JButton();
         pnlIndicadorArx = new javax.swing.JPanel();
         jSeparator1 = new javax.swing.JSeparator();
@@ -116,8 +118,6 @@ public class FramePDF extends javax.swing.JFrame {
             }
         });
 
-        cmbCompania.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccionar Cia" }));
-
         btnGuardar.setText("Guardar");
         btnGuardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -132,9 +132,7 @@ public class FramePDF extends javax.swing.JFrame {
             .addGroup(pnlBotonesArxLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(btnBuscarFactura, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 89, Short.MAX_VALUE)
-                .addComponent(cmbCompania, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 89, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 338, Short.MAX_VALUE)
                 .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -143,7 +141,6 @@ public class FramePDF extends javax.swing.JFrame {
             .addGroup(pnlBotonesArxLayout.createSequentialGroup()
                 .addGroup(pnlBotonesArxLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnBuscarFactura, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cmbCompania, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 8, Short.MAX_VALUE))
         );
@@ -220,15 +217,17 @@ public class FramePDF extends javax.swing.JFrame {
     }//GEN-LAST:event_btnBuscarFacturaActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        System.err.println(arx);
-        if (arx != null){
+        if (arxSize > 0){
             try {
                 cargaArchivos();
+                JOptionPane.showMessageDialog(this,"Datos Guardados Correctamente","", JOptionPane.WARNING_MESSAGE,new ImageIcon("src/img/bien.png"));
             } catch (IOException | DocumentException | WriterException | InterruptedException ex) {
+                Logger.getLogger(FramePDF.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (Exception ex) {
                 Logger.getLogger(FramePDF.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else {
-            JOptionPane.showMessageDialog(this, "No hay Archivos ");
+            JOptionPane.showMessageDialog(this,"No hay Archivos, no se puede Guardar","", JOptionPane.ERROR_MESSAGE);
         }        
     }//GEN-LAST:event_btnGuardarActionPerformed
 
@@ -299,70 +298,54 @@ public class FramePDF extends javax.swing.JFrame {
         }
     }
 
-    public void cargaArchivos() throws BadElementException, IOException, DocumentException, WriterException, InterruptedException {
+    public void cargaArchivos () throws BadElementException, IOException, DocumentException, WriterException, InterruptedException{
         int hoja[] = new int[100];
         int ultPag = 0;
-        boolean permiso = false;
+        //boolean permiso = false;
         int vcons;
+        String val = "";
+        
         BaseFont bf = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
-
-        consecutivos = "000000";
-
-        FilenameFilter filter = new FilenameFilter() {
-            public boolean accept(File dir, String fileName) {
-                return fileName.endsWith("pdf");
-            }
-        };
-
-        File f = new File(URL);
-        String[] fileList = f.list(filter);
-
-        for (int i = 0; i < fileList.length; i++) { //para los archivos
-            PdfReader reader = new PdfReader(URL + "\\" + fileList[i]);
-
-            /**
-             * ***************** Corte de nombre PDF **********************
-             */
-            String colores = fileList[i];
-            String[] arrayNombres = colores.split("_");
+        
+        for (int i = 0; i < arxSize; i++){ //para los archivos\
+            PdfReader reader = new PdfReader(arx[i].getPath());
+                                  
+            /******************* Corte de nombre PDF ***********************/
+            String nombres = arx[i].getName();
+            String[] arrayNombres = nombres.split("_");
 
             // En este momento tenemos un array en el que cada elemento es un color.
             for (int n = 0; n < arrayNombres.length; n++) {
-                if (n == 0) {
+                if (n == 0 ){
+                    vendor = arrayNombres[n];
+                }else if (n == 1){
+                    factura = arrayNombres[n];
+                }else if(n == 2){
                     compania = arrayNombres[n];
                 }
             }
-            System.err.println(compania);
-            /**
-             * ***********************************************************
-             */
-            PdfStamper stamper = new PdfStamper(reader, new FileOutputStream("C:\\temp\\" + fileList[i]));
-            for (int pag = 1; pag <= reader.getNumberOfPages(); pag++) { //para las hojas
-                hoja[pag] = pag;
-                if (hoja[pag] > ultPag) {
-                    ultPag = hoja[pag];
-                }
-            }
-
-            for (int pag = 1; pag <= reader.getNumberOfPages(); pag++) {
-                if (pag == ultPag) {
-                    codigoQr = compania + "-" + consecutivos;
+            /**************************************************************/
+            PdfStamper stamper = new PdfStamper(reader, new  FileOutputStream("C:\\temp\\"+arx[i].getName())) ;
+            
+            for (int pag = 0; pag <= reader.getNumberOfPages(); pag++) {
+                if (pag == 1){                 
+                    codigoQr = compania+"-"+consecutivos;
                     generaQr();
                     PdfContentByte over = stamper.getOverContent(pag);
-
+                    
                     //Imprime Rectangulo
                     over.setColorStroke(BaseColor.BLACK);
                     over.setColorFill(BaseColor.WHITE);
-                    over.rectangle(538, 5, 70, 45);
+                    over.rectangle(538,5,70,45);
                     over.fill();
                     over.stroke();
-
+                    
                     //Abre Qr
                     java.awt.Image awtImage = Toolkit.getDefaultToolkit().createImage("C:\\temp\\codigoQR.png");
                     Image image = Image.getInstance(awtImage, null);
                     image.setAbsolutePosition(551, 8);
                     over.addImage(image);
-
+                    
                     //imprime Texto
                     over.beginText();
                     over.setColorFill(BaseColor.BLACK);
@@ -371,27 +354,53 @@ public class FramePDF extends javax.swing.JFrame {
                     over.showText(codigoQr);  // set text
                     over.endText();
                 }
+            }            
+            
+            try {
+                if (registro.validaArchivoExistente(vendor, factura, compania) == 0 ){
+                    if (registro.consultaUltimoConsecutivo(compania, factura) == null  ){
+                        consecutivos = "000000";
+                        //System.out.println("null" +"-"+ consecutivos );
+                        registra();
+                    } else {
+                        consecu = registro.consultaUltimoConsecutivo(compania, factura);
+                        int con = Integer.parseInt(consecu);
+                        consecutivos = Integer.toString(con+1);                   
+                        
+                        //System.out.println("!null" +consecu+" - "+consecutivos);
+                        
+                        if(consecutivos.length() < 6){
+                            if (consecutivos.length() == 1){
+                                System.out.println("d1");
+                                consecutivos = "00000"+consecutivos;
+                            }else if (consecutivos.length() == 2){
+                                System.out.println("d2");
+                                consecutivos = "0000"+consecutivos;
+                            }else if (consecutivos.length() == 3){
+                                System.out.println("d3");
+                                consecutivos = "000"+consecutivos;
+                            }else if (consecutivos.length() == 4){
+                                System.out.println("d4");
+                                consecutivos = "00"+consecutivos;
+                            }else if (consecutivos.length() == 5){
+                                System.out.println("d5");
+                                consecutivos = "0"+consecutivos;
+                            }
+                        }
+                        System.err.println(consecutivos);
+                        if (consecutivos.length() == 6){
+                            registra();
+                        }
+                    }
+                    
+                }else {
+                    JOptionPane.showMessageDialog(this,"El Archivo "+arx[i].getName()+ "\n No se puede cargar, ya que ha sido usado previamente.");//+vendor +", "+ factura + ", "+ vendor);
+                }                
+            } catch (Exception ex) {
+                Logger.getLogger(FramePDF.class.getName()).log(Level.SEVERE, null, ex);
             }
-            vcons = Integer.parseInt(consecutivos);
-            consecutivos = String.valueOf(vcons + 1);
-            if (consecutivos.length() < 6) {
-                if (consecutivos.length() == 1) {
-                    consecutivos = "00000" + consecutivos;
-                } else if (consecutivos.length() == 2) {
-                    consecutivos = "0000" + consecutivos;
-                } else if (consecutivos.length() == 3) {
-                    consecutivos = "000" + consecutivos;
-                } else if (consecutivos.length() == 4) {
-                    consecutivos = "00" + consecutivos;
-                } else if (consecutivos.length() == 5) {
-                    consecutivos = "0" + consecutivos;
-                }
-            }
-            //Thread.sleep (900);
-
-            stamper.close();
-            //System.out.println("Ultima Hoja "+fileList[i]+" : " + ultPag);
-            ultPag = 0;
+            stamper.close(); //cierra archivo
+            ultPag = 0;    
         }
     }
 
@@ -420,6 +429,22 @@ public class FramePDF extends javax.swing.JFrame {
         qrCode.close();
     }
 
+    public static void registra () throws Exception{
+        System.out.println("registra");
+        Object[] reg = new Object[4];
+        try {
+            reg[0] = vendor;
+            reg[1] = factura;
+            reg[2] = compania;
+            reg[3] = consecutivos;
+            
+            registro.registroFactura(reg);
+            
+        } catch (Exception ex) {
+            throw ex;
+        }
+    }
+    
     private void viewPage() {
         pnlPDF = new PagePanel();
 
@@ -449,7 +474,6 @@ public class FramePDF extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscarFactura;
     private javax.swing.JButton btnGuardar;
-    private javax.swing.JComboBox<String> cmbCompania;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JLabel lblIndicadorArx;
     private javax.swing.JMenuItem mniEdicionArchivo;
