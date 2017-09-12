@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -69,6 +70,15 @@ public class FramePDF extends javax.swing.JFrame {
     private static final String IMAGE_FORMAT = "png";
        
     private static db.RegistrosDAOImpl registro = new db.RegistrosDAOImpl();
+    
+    //COMPANY CODE 
+    static String manufacturing = "G8D0";
+    static String service = "G8F0";
+    static String llc = "G9C0";
+    
+    //
+    private ArrayList encontrados = new ArrayList(); 
+    private ArrayList malEscrito = new ArrayList();
     
     /** Creates new form FramePDF */
     public FramePDF() {
@@ -277,7 +287,6 @@ public class FramePDF extends javax.swing.JFrame {
                     if (opcion == JFileChooser.FILES_ONLY) {
                         try {
                             File file = new File(arx[0].getAbsolutePath());
-                            System.err.println("file: " + file);
                             // Ubicación del archivo pdf
                             RandomAccessFile raf = new RandomAccessFile(file, "r");
                             FileChannel channel = raf.getChannel();
@@ -316,15 +325,16 @@ public class FramePDF extends javax.swing.JFrame {
     }
 
     public void cargaArchivos () throws BadElementException, IOException, DocumentException, WriterException, InterruptedException{
-        int hoja[] = new int[100];
-        int ultPag = 0;
-        //boolean permiso = false;
-        int vcons;
-        String val = "";
+        //int hoja[] = new int[100];
+        //int ultPag = 0;
+        //int vcons;
+        //String val = "";
+        
+        PdfStamper stamper ;
         
         BaseFont bf = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
         
-        for (int i = 0; i < arxSize; i++) { //para los archivos\
+        for (int i = 0; i < arxSize; i++) { //para los archivos
             PdfReader reader = new PdfReader(arx[i].getPath());
                                   
             /******************* Corte de nombre PDF ***********************/
@@ -341,9 +351,28 @@ public class FramePDF extends javax.swing.JFrame {
                     compania = arrayNombres[n];
                 }
             }
+                        
             /**************************************************************/
-            PdfStamper stamper = new PdfStamper(reader, new  FileOutputStream("C:\\temp\\"+arx[i].getName())) ;
+            if (compania.contains(service)){
+                compania = service;
+                System.out.println(compania+" service "+i+" "+arx[i].getName());
+                stamper = new PdfStamper(reader, new  FileOutputStream("C:/Users/PRR1TL/Desktop/Rutas/Service/"+arx[i].getName()));
+            } else if (compania.contains(llc)){
+                compania = llc;
+                System.out.println(compania+" llc "+i+" "+arx[i].getName());
+                stamper = new PdfStamper(reader, new  FileOutputStream("C:/Users/PRR1TL/Desktop/Rutas/LLC/"+arx[i].getName())) ;
+            } else if (compania.equals(manufacturing)){
+                compania = manufacturing;
+                System.out.println(compania+" manufacturing " +i);
+                stamper = new PdfStamper(reader, new  FileOutputStream("C:/Users/PRR1TL/Desktop/Rutas/Manufacturing/"+arx[i].getName()));
+            }else {
+                malEscrito.add(arx[i].getName());
+                stamper = new PdfStamper(reader, new  FileOutputStream("C:/Users/PRR1TL/Desktop/Rutas/"+arx[i].getName()));
+                stamper.close();
+            }
             
+            //stamper = new PdfStamper(reader, new  FileOutputStream("C:/Users/PRR1TL/Desktop/Rutas/"+arx[i].getName()));
+            /*************************************************************/
             for (int pag = 0; pag <= reader.getNumberOfPages(); pag++) {
                 if (pag == 1) {
                     codigoQr = compania + "-" + consecutivos;
@@ -377,14 +406,11 @@ public class FramePDF extends javax.swing.JFrame {
                 if (registro.validaArchivoExistente(vendor, factura, compania) == 0) {
                     if (registro.consultaUltimoConsecutivo(compania, factura) == null) {
                         consecutivos = "000000";
-                        //System.out.println("null" +"-"+ consecutivos );
                         registra();
                     } else {
                         consecu = registro.consultaUltimoConsecutivo(compania, factura);
                         int con = Integer.parseInt(consecu);
                         consecutivos = Integer.toString(con + 1);                  
-                        
-                        //System.out.println("!null" +consecu+" - "+consecutivos);
                         
                         if (consecutivos.length() < 6) {
                             if (consecutivos.length() == 1) {
@@ -399,14 +425,14 @@ public class FramePDF extends javax.swing.JFrame {
                                 consecutivos = "0" + consecutivos;
                             }
                         }
-                        System.err.println(consecutivos);
                         if (consecutivos.length() == 6) {
                             registra();
                         }
                     }
 
                 } else {
-                    JOptionPane.showMessageDialog(this, "El Archivo " + arx[i].getName() + "\nNo se puede cargar, ya que ha sido usado previamente.");//+vendor +", "+ factura + ", "+ vendor);
+                    encontrados.add(arx[i].getName());
+                    //JOptionPane.showMessageDialog(this, "El Archivo " + arx[i].getName() + "\nNo se puede cargar, ya que ha sido usado previamente.");//+vendor +", "+ factura + ", "+ vendor);
                 }
             } catch (Exception ex) {
                 setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
@@ -415,8 +441,8 @@ public class FramePDF extends javax.swing.JFrame {
                     btnGuardar.setEnabled(false);
                 }
             }
+            
             stamper.close(); //cierra archivo
-            ultPag = 0;
         }
     }
 
@@ -446,7 +472,6 @@ public class FramePDF extends javax.swing.JFrame {
     }
 
     public static void registra () throws Exception{
-        System.out.println("registra");
         Object[] reg = new Object[4];
         try {
             reg[0] = vendor;
