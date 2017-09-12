@@ -245,12 +245,16 @@ public class FramePDF extends javax.swing.JFrame {
     }//GEN-LAST:event_mniEdicionManualActionPerformed
 
     private void mniEdicionArchivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniEdicionArchivoActionPerformed
+        setCursor(new Cursor(Cursor.WAIT_CURSOR));
         abrirJFileChooser(this, JFileChooser.FILES_ONLY);
+        setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_mniEdicionArchivoActionPerformed
 
     private void mniEdicionCarpetaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniEdicionCarpetaActionPerformed
         removePanelPDF();
+        setCursor(new Cursor(Cursor.WAIT_CURSOR));
         abrirJFileChooser(this, JFileChooser.DIRECTORIES_ONLY);
+        setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_mniEdicionCarpetaActionPerformed
 
     private void abrirJFileChooser(Component parent, int opcion) {
