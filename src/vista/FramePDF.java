@@ -38,6 +38,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import java.util.ArrayList;
 
 /**
  * Hecho con <3 por:
@@ -497,7 +498,7 @@ public class FramePDF extends javax.swing.JFrame {
         repaint();
         pack();
 
-        PDFPage page = pdffile.getPage(1); //SOLO PERMITE EDITAR LA PRIMER PAGINA
+        PDFPage page = pdffile.getPage(1);
         pnlPDF.useZoomTool(false);
         pnlPDF.showPage(page);
         pnlPDF.repaint();
