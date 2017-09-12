@@ -25,14 +25,10 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
-import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
@@ -52,8 +48,6 @@ public class FramePDF extends javax.swing.JFrame {
     int arxSize = 0;
     private File f = null;
     
-    //private int pagina;
-    //private int paginas;
     private PagePanel pnlPDF;
     private PDFFile pdffile;
     
@@ -288,17 +282,10 @@ public class FramePDF extends javax.swing.JFrame {
                     if (opcion == JFileChooser.FILES_ONLY) {
                         try {
                             File file = new File(arx[0].getAbsolutePath());
-                            // Ubicación del archivo pdf
                             RandomAccessFile raf = new RandomAccessFile(file, "r");
                             FileChannel channel = raf.getChannel();
-
                             ByteBuffer buf = channel.map(FileChannel.MapMode.READ_ONLY, 0, channel.size());
                             pdffile = new PDFFile(buf);
-                            //obtenemos el total de paginas que tiene el documento
-                            //paginas = pdffile.getNumPages();
-                            //posicionamos pagina en la ultima 
-                            //pagina = paginas;
-                            //solo abrimos
                             viewPage();
                             raf.close();
                             lblIndicadorArx.setText("Nombre del archivo: " + arx[0].getName());
