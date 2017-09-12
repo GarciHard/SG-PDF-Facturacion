@@ -388,19 +388,14 @@ public class FramePDF extends javax.swing.JFrame {
                         
                         if (consecutivos.length() < 6) {
                             if (consecutivos.length() == 1) {
-                                System.out.println("d1");
                                 consecutivos = "00000" + consecutivos;
                             } else if (consecutivos.length() == 2) {
-                                System.out.println("d2");
                                 consecutivos = "0000" + consecutivos;
                             } else if (consecutivos.length() == 3) {
-                                System.out.println("d3");
                                 consecutivos = "000" + consecutivos;
                             } else if (consecutivos.length() == 4) {
-                                System.out.println("d4");
                                 consecutivos = "00" + consecutivos;
                             } else if (consecutivos.length() == 5) {
-                                System.out.println("d5");
                                 consecutivos = "0" + consecutivos;
                             }
                         }
@@ -477,7 +472,7 @@ public class FramePDF extends javax.swing.JFrame {
         repaint();
         pack();
 
-        PDFPage page = pdffile.getPage(pagina);
+        PDFPage page = pdffile.getPage(1); //SOLO PERMITE EDITAR LA PRIMER PAGINA
         pnlPDF.useZoomTool(false);
         pnlPDF.showPage(page);
         pnlPDF.repaint();
