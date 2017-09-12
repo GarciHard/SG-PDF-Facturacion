@@ -18,7 +18,8 @@ public class ConexionBD {
     }
     
     private final String driverJDBC = "net.ucanaccess.jdbc.UcanaccessDriver";   
-    //URL PRUEBA PRR1TL
+    
+    //URL PRODUCCION
     private final String urlDB = "jdbc:ucanaccess://" + "I:/Dept/MOE1/Shared/Informacion_general/proyectos  SG/Proyecto Factura/DB/dbFacturas.accdb";
     
     public void conectar() throws Exception {
