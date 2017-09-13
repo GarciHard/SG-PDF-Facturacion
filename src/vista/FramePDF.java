@@ -12,6 +12,7 @@ import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfStamper;
+import com.itextpdf.text.pdf.PdfWriter;
 import com.sun.pdfview.PDFFile;
 import com.sun.pdfview.PDFPage;
 import com.sun.pdfview.PagePanel;
@@ -200,6 +201,7 @@ public class FramePDF extends javax.swing.JFrame {
         pnlEdicionArx.setPreferredSize(new java.awt.Dimension(700, 500));
 
         buttonGroup1.add(rdbSuperiorIzq);
+        rdbSuperiorIzq.setActionCommand("_rdbSuperiorIzq");
         rdbSuperiorIzq.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 rdbSuperiorIzqActionPerformed(evt);
@@ -207,6 +209,7 @@ public class FramePDF extends javax.swing.JFrame {
         });
 
         buttonGroup1.add(rdbInferiorIzq);
+        rdbInferiorIzq.setActionCommand("_rdbInferiorIzq");
         rdbInferiorIzq.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 rdbInferiorIzqActionPerformed(evt);
@@ -235,6 +238,7 @@ public class FramePDF extends javax.swing.JFrame {
         );
 
         buttonGroup1.add(rdbSuperiorDer);
+        rdbSuperiorDer.setActionCommand("_rdbSuperiorDer");
         rdbSuperiorDer.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 rdbSuperiorDerActionPerformed(evt);
@@ -242,6 +246,7 @@ public class FramePDF extends javax.swing.JFrame {
         });
 
         buttonGroup1.add(rdbInferiorDer);
+        rdbInferiorDer.setActionCommand("_rdbInferiorDer");
         rdbInferiorDer.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 rdbInferiorDerActionPerformed(evt);
@@ -452,19 +457,19 @@ public class FramePDF extends javax.swing.JFrame {
     }//GEN-LAST:event_mniEdicionCarpetaActionPerformed
 
     private void rdbSuperiorIzqActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdbSuperiorIzqActionPerformed
-        
+        selectorPosicion(evt);
     }//GEN-LAST:event_rdbSuperiorIzqActionPerformed
 
     private void rdbInferiorIzqActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdbInferiorIzqActionPerformed
-        // TODO add your handling code here:
+        selectorPosicion(evt);
     }//GEN-LAST:event_rdbInferiorIzqActionPerformed
 
     private void rdbSuperiorDerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdbSuperiorDerActionPerformed
-        // TODO add your handling code here:
+        selectorPosicion(evt);
     }//GEN-LAST:event_rdbSuperiorDerActionPerformed
 
     private void rdbInferiorDerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdbInferiorDerActionPerformed
-        // TODO add your handling code here:
+        selectorPosicion(evt);
     }//GEN-LAST:event_rdbInferiorDerActionPerformed
 
     private void abrirJFileChooser(Component parent, int opcion) {
@@ -678,8 +683,8 @@ public class FramePDF extends javax.swing.JFrame {
         pnlEdicionArx.setVisible(true);
         pnlPDF = new PagePanel();
         
-        pnlPDF.setPreferredSize(new Dimension(700, 500));
-        setPreferredSize(new Dimension(700, 500));
+        //pnlPDF.setPreferredSize(new Dimension(700, 500));
+        //setPreferredSize(new Dimension(700, 500));
         
         pnlVisorFactura.add(pnlPDF, BorderLayout.CENTER);
         
@@ -709,8 +714,8 @@ public class FramePDF extends javax.swing.JFrame {
             btnGuardar.setEnabled(false);
         }
     }
-    
-    private void crearVisorFactura(String pathFile)throws HeadlessException, IOException {
+
+    private void crearVisorFactura(String pathFile) throws HeadlessException, IOException {
         try {
             File file = new File(pathFile);
             RandomAccessFile raf = new RandomAccessFile(file, "r");
@@ -720,6 +725,68 @@ public class FramePDF extends javax.swing.JFrame {
             viewPage();
             raf.close();
         } catch (HeadlessException | IOException e) {
+            throw e;
+        }
+    }
+
+    private void selectorPosicion(java.awt.event.ActionEvent evt) {
+        switch (evt.getActionCommand()) {
+            case "_rdbSuperiorIzq":
+                try {
+                    inhabilitarBtnGuardar();
+                    edicionManual(8, page.getHeight() - 45);
+                    btnGuardar.setEnabled(true);
+                } catch (WriterException | DocumentException | HeadlessException | IOException e) {
+                    //Exception
+                    System.out.println("izq " + e);
+                }               
+                break;
+            case "_rdbSuperiorDer":
+                try {
+                    inhabilitarBtnGuardar();
+                    edicionManual(page.getWidth() - 70, page.getHeight() - 45);
+                    btnGuardar.setEnabled(true);
+                } catch (WriterException | DocumentException | HeadlessException | IOException e) {
+                    //Exception
+                    System.out.println("der " + e);
+                }
+                break;
+        }
+    }
+    
+    private void edicionManual(float x, float y) throws WriterException, DocumentException, HeadlessException, IOException{
+        try {
+            BaseFont bf = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
+            PdfReader reader = new PdfReader(arx[0].getPath());
+            stamper = new PdfStamper(reader, new FileOutputStream("C:/Users/GJA5TL/Documents/" + arx[0].getName(), true));
+            codigoQr = "XXX" + "-" + "000";
+            generaQr();
+            PdfContentByte over = stamper.getOverContent(1);
+
+            //Imprime Rectangulo
+            over.setColorStroke(BaseColor.BLACK);
+            over.setColorFill(BaseColor.WHITE);
+            over.rectangle(538, 5, 70, 45);
+            over.fill();
+            over.stroke();
+
+            //Abre Qr
+            java.awt.Image awtImage = Toolkit.getDefaultToolkit().createImage("C:\\temp\\codigoQR.png");
+            Image image = Image.getInstance(awtImage, null);
+            image.setAbsolutePosition(x, y);
+            over.addImage(image);
+
+            //imprime Texto
+            over.beginText();
+            over.setColorFill(BaseColor.BLACK);
+            over.setFontAndSize(bf, 7);    // COLOR Y TAMANO
+            over.setTextMatrix(x, y);   // set x,y posiCION (0,0)
+            over.showText(codigoQr);  // IMPRIME TEXTO
+            over.endText();
+            stamper.close();
+            reader.close();
+            crearVisorFactura("C:/Users/GJA5TL/Documents/" + arx[0].getName());
+        } catch (WriterException | DocumentException | HeadlessException | IOException e) {
             throw e;
         }
     }
