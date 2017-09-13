@@ -84,13 +84,15 @@ public class FramePDF extends javax.swing.JFrame {
     /** Creates new form FramePDF */
     public FramePDF() {
         initComponents();
+        pnlEdicionArx.setVisible(false);
+        setSize(new Dimension(700, 210));
     }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        pnlEdicionArx = new javax.swing.JPanel();
+        buttonGroup1 = new javax.swing.ButtonGroup();
         pnlBackground = new javax.swing.JPanel();
         pnlBotonesArx = new javax.swing.JPanel();
         btnBuscarFactura = new javax.swing.JButton();
@@ -98,24 +100,18 @@ public class FramePDF extends javax.swing.JFrame {
         pnlIndicadorArx = new javax.swing.JPanel();
         jSeparator1 = new javax.swing.JSeparator();
         lblIndicadorArx = new javax.swing.JLabel();
+        pnlEdicionArx = new javax.swing.JPanel();
+        jPanel1 = new javax.swing.JPanel();
+        jRadioButton3 = new javax.swing.JRadioButton();
+        jRadioButton4 = new javax.swing.JRadioButton();
+        jPanel2 = new javax.swing.JPanel();
+        jRadioButton1 = new javax.swing.JRadioButton();
+        jRadioButton2 = new javax.swing.JRadioButton();
+        pnlVisorFactura = new javax.swing.JPanel();
         mnuBarra = new javax.swing.JMenuBar();
         mnuEdicion = new javax.swing.JMenu();
         mniEdicionCarpeta = new javax.swing.JMenuItem();
         mniEdicionArchivo = new javax.swing.JMenuItem();
-
-        pnlEdicionArx.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Visor Factura", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Calibri", 0, 18))); // NOI18N
-        pnlEdicionArx.setPreferredSize(new java.awt.Dimension(700, 500));
-
-        javax.swing.GroupLayout pnlEdicionArxLayout = new javax.swing.GroupLayout(pnlEdicionArx);
-        pnlEdicionArx.setLayout(pnlEdicionArxLayout);
-        pnlEdicionArxLayout.setHorizontalGroup(
-            pnlEdicionArxLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 688, Short.MAX_VALUE)
-        );
-        pnlEdicionArxLayout.setVerticalGroup(
-            pnlEdicionArxLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 468, Short.MAX_VALUE)
-        );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -125,6 +121,7 @@ public class FramePDF extends javax.swing.JFrame {
         pnlBotonesArx.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Opciones", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Calibri", 0, 18))); // NOI18N
 
         btnBuscarFactura.setText("Buscar Factura (s)");
+        btnBuscarFactura.setFocusable(false);
         btnBuscarFactura.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnBuscarFacturaActionPerformed(evt);
@@ -133,6 +130,7 @@ public class FramePDF extends javax.swing.JFrame {
 
         btnGuardar.setText("Guardar");
         btnGuardar.setEnabled(false);
+        btnGuardar.setFocusable(false);
         btnGuardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnGuardarActionPerformed(evt);
@@ -159,7 +157,7 @@ public class FramePDF extends javax.swing.JFrame {
                 .addGap(0, 8, Short.MAX_VALUE))
         );
 
-        pnlBackground.add(pnlBotonesArx, java.awt.BorderLayout.PAGE_START);
+        pnlBackground.add(pnlBotonesArx, java.awt.BorderLayout.NORTH);
 
         jSeparator1.setForeground(new java.awt.Color(0, 0, 0));
 
@@ -171,7 +169,7 @@ public class FramePDF extends javax.swing.JFrame {
         pnlIndicadorArxLayout.setHorizontalGroup(
             pnlIndicadorArxLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlIndicadorArxLayout.createSequentialGroup()
-                .addContainerGap(185, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(lblIndicadorArx, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
             .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING)
@@ -186,7 +184,84 @@ public class FramePDF extends javax.swing.JFrame {
                 .addGap(9, 9, 9))
         );
 
-        pnlBackground.add(pnlIndicadorArx, java.awt.BorderLayout.PAGE_END);
+        pnlBackground.add(pnlIndicadorArx, java.awt.BorderLayout.SOUTH);
+
+        pnlEdicionArx.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Visor Factura", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Calibri", 0, 18))); // NOI18N
+        pnlEdicionArx.setPreferredSize(new java.awt.Dimension(700, 500));
+
+        buttonGroup1.add(jRadioButton3);
+
+        buttonGroup1.add(jRadioButton4);
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap(150, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jRadioButton3, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jRadioButton4, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addContainerGap())
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jRadioButton3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jRadioButton4)
+                .addContainerGap())
+        );
+
+        buttonGroup1.add(jRadioButton1);
+
+        buttonGroup1.add(jRadioButton2);
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jRadioButton1)
+                    .addComponent(jRadioButton2))
+                .addContainerGap(150, Short.MAX_VALUE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jRadioButton1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 76, Short.MAX_VALUE)
+                .addComponent(jRadioButton2)
+                .addContainerGap())
+        );
+
+        pnlVisorFactura.setLayout(new java.awt.BorderLayout());
+
+        javax.swing.GroupLayout pnlEdicionArxLayout = new javax.swing.GroupLayout(pnlEdicionArx);
+        pnlEdicionArx.setLayout(pnlEdicionArxLayout);
+        pnlEdicionArxLayout.setHorizontalGroup(
+            pnlEdicionArxLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlEdicionArxLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(pnlVisorFactura, javax.swing.GroupLayout.DEFAULT_SIZE, 260, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+        pnlEdicionArxLayout.setVerticalGroup(
+            pnlEdicionArxLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(pnlVisorFactura, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
+        pnlBackground.add(pnlEdicionArx, java.awt.BorderLayout.CENTER);
 
         mnuEdicion.setText("Edición");
 
@@ -218,7 +293,7 @@ public class FramePDF extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlBackground, javax.swing.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE)
+            .addComponent(pnlBackground, javax.swing.GroupLayout.DEFAULT_SIZE, 329, Short.MAX_VALUE)
         );
 
         pack();
@@ -358,12 +433,15 @@ public class FramePDF extends javax.swing.JFrame {
                     }
                 } else {
                     lblIndicadorArx.setText("No se encontraron archivos con la extensión adecuada");
+                    inhabilitarBtnGuardar();
                 }
             } else {
                 lblIndicadorArx.setText("La carpeta esta vacía. Código de error: ICO-NPE");
+                inhabilitarBtnGuardar();
             }
         } else {
             lblIndicadorArx.setText("Debe seleccionar una carpeta o archivo");
+            inhabilitarBtnGuardar();
         }
     }
 
@@ -538,13 +616,13 @@ public class FramePDF extends javax.swing.JFrame {
     }
     
     private void viewPage() {
+        pnlEdicionArx.setVisible(true);
         pnlPDF = new PagePanel();
 
         pnlPDF.setPreferredSize(new Dimension(700, 500));
         setPreferredSize(new Dimension(700, 500));
-
-        pnlEdicionArx = new javax.swing.JPanel();
-        pnlEdicionArx.add(pnlPDF);
+        
+        pnlVisorFactura.add(pnlPDF, BorderLayout.CENTER);
         
         pnlBackground.add(pnlEdicionArx, BorderLayout.CENTER);
 
@@ -558,11 +636,11 @@ public class FramePDF extends javax.swing.JFrame {
     }
 
     private void removePanelPDF() {
-        if (pnlPDF != null) {
+        if (pnlEdicionArx != null) {
             setResizable(false);
-            pnlBackground.remove(pnlPDF);
+            pnlBackground.remove(pnlEdicionArx);
             repaint();
-            setPreferredSize(new Dimension(700, 200));
+            setPreferredSize(new Dimension(700, 210));
             pack();
         }
     }
@@ -576,6 +654,13 @@ public class FramePDF extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscarFactura;
     private javax.swing.JButton btnGuardar;
+    private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JRadioButton jRadioButton1;
+    private javax.swing.JRadioButton jRadioButton2;
+    private javax.swing.JRadioButton jRadioButton3;
+    private javax.swing.JRadioButton jRadioButton4;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JLabel lblIndicadorArx;
     private javax.swing.JMenuItem mniEdicionArchivo;
@@ -586,6 +671,7 @@ public class FramePDF extends javax.swing.JFrame {
     private javax.swing.JPanel pnlBotonesArx;
     private javax.swing.JPanel pnlEdicionArx;
     private javax.swing.JPanel pnlIndicadorArx;
+    private javax.swing.JPanel pnlVisorFactura;
     // End of variables declaration//GEN-END:variables
 
 }
