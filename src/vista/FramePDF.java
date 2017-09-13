@@ -35,6 +35,8 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Hecho con <3 por:
@@ -356,6 +358,7 @@ public class FramePDF extends javax.swing.JFrame {
         try {
             setCursor(new Cursor(Cursor.WAIT_CURSOR));
             cargaArchivos();
+            //cargaArchivos();
             setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
             
             if (arxSize == conCargadosCorrectos) {
@@ -415,9 +418,14 @@ public class FramePDF extends javax.swing.JFrame {
             }
             btnGuardar.setEnabled(false);
             lblIndicadorArx.setText("");
-        } catch (WriterException | DocumentException | HeadlessException | IOException | InterruptedException e) {
+        } catch (DocumentException | HeadlessException | IOException | InterruptedException e) {
             setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
             lblIndicadorArx.setText("Error: " + e);
+            inhabilitarBtnGuardar();
+        } catch (Exception ex) {
+            Logger.getLogger(FramePDF.class.getName()).log(Level.SEVERE, null, ex);
+            setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+            lblIndicadorArx.setText("Error: " + ex);
             inhabilitarBtnGuardar();
         }
         conCargadosCorrectos = 0;
@@ -507,9 +515,9 @@ public class FramePDF extends javax.swing.JFrame {
         }
     }
 
-    public void cargaArchivos () throws BadElementException, IOException, DocumentException, WriterException, InterruptedException{
-        int bnPermisoCarga = 0;
-        BaseFont bf = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
+    public void cargaArchivos () throws DocumentException, IOException, Exception {
+       
+       BaseFont bf = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
         
         for (int i = 0; i < arxSize; i++) { //para los archivos
             PdfReader reader = new PdfReader(arx[i].getPath());
@@ -528,30 +536,30 @@ public class FramePDF extends javax.swing.JFrame {
                     compania = arrayNombres[n].toUpperCase(); //OBTIENE COMPANIA EN MAYUSCULAS
                 }
             }
-                        
+            
+            if (registro.validaArchivoExistente(vendor, factura, compania) == 0) {   
             /******RUTAS DE GUARDADO DE ACUERDO A LA COMPANIA****************************/
-            if (compania.length() <= 7 ){
-                //conCargadosCorrectos += 1;
-                if (compania.contains(service)){
-                    compania = service;
-                    //System.out.println(folderServer+arx[i].getName());
-                    stamper = new PdfStamper(reader, new  FileOutputStream(folderServer+"/"+arx[i].getName()));
-                } else if (compania.contains(llc)){
-                    compania = llc;
-                    //System.out.println(folderLLC+arx[i].getName());
-                    stamper = new PdfStamper(reader, new  FileOutputStream(folderLLC+"/"+arx[i].getName())) ;
-                } else if (compania.equals(manufacturing)){
-                    compania = manufacturing;
-                    stamper = new PdfStamper(reader, new  FileOutputStream(folderManufacturing+"/"+arx[i].getName()));
-                }else {   
-                    //System.out.println(folderOtras+arx[i].getName());
-                    stamper = new PdfStamper(reader, new  FileOutputStream(folderOtras+"/"+arx[i].getName()));
-                }
-                
-                /************EVALUA QUE LOS ARCHIVOS NO HAYAN SIDO MODIFICADOS PREVIAMENTE**************************/
+                if (compania.length() <= 7 ){
+                    //conCargadosCorrectos += 1;
+                    if (compania.contains(service)){
+                        compania = service;
+                        //System.out.println(folderServer+arx[i].getName());
+                        stamper = new PdfStamper(reader, new  FileOutputStream(folderServer+"/"+arx[i].getName()));
+                    } else if (compania.contains(llc)){
+                        compania = llc;
+                        //System.out.println(folderLLC+arx[i].getName());
+                        stamper = new PdfStamper(reader, new  FileOutputStream(folderLLC+"/"+arx[i].getName())) ;
+                    } else if (compania.equals(manufacturing)){
+                        compania = manufacturing;
+                        stamper = new PdfStamper(reader, new  FileOutputStream(folderManufacturing+"/"+arx[i].getName()));
+                    }else {   
+                        //System.out.println(folderOtras+arx[i].getName());
+                        stamper = new PdfStamper(reader, new  FileOutputStream(folderOtras+"/"+arx[i].getName()));
+                    }
+                    
+                    /************EVALUA QUE LOS ARCHIVOS NO HAYAN SIDO MODIFICADOS PREVIAMENTE**************************/
 
-                try {
-                    if (registro.validaArchivoExistente(vendor, factura, compania) == 0) {
+                    try {
                         if (registro.consultaUltimoConsecutivo(compania, factura) == null) {
                             consecutivos = "000000";
                             registra();
@@ -576,54 +584,52 @@ public class FramePDF extends javax.swing.JFrame {
                             if (consecutivos.length() == 6) {
                                 registra();
                             }
-                        }                        
-                    } else {
-                        conEncontrados = conEncontrados+1; 
-                        encontrados.add("\n"+arx[i].getName());
-                        //JOptionPane.showMessageDialog(this, "El Archivo " + arx[i].getName() + "\nNo se puede cargar, ya que ha sido usado previamente.");//+vendor +", "+ factura + ", "+ vendor);
-                    }
-                    
+                        }        
                     /*********************PINTA QR ******************/
-                    for (int pag = 0; pag <= reader.getNumberOfPages(); pag++) {
-                        if (pag == 1) {
-                            codigoQr = compania + "-" + consecutivos;
-                            generaQr();
-                            PdfContentByte over = stamper.getOverContent(pag);
+                        for (int pag = 0; pag <= reader.getNumberOfPages(); pag++) {
+                            if (pag == 1) {
+                                codigoQr = compania + "-" + consecutivos;
+                                generaQr();
+                                PdfContentByte over = stamper.getOverContent(pag);
 
-                            //Imprime Rectangulo
-                            over.setColorStroke(BaseColor.BLACK);
-                            over.setColorFill(BaseColor.WHITE);
-                            over.rectangle(538, 5, 70, 45);
-                            over.fill();
-                            over.stroke();
+                                //Imprime Rectangulo
+                                over.setColorStroke(BaseColor.BLACK);
+                                over.setColorFill(BaseColor.WHITE);
+                                over.rectangle(538, 5, 70, 45);
+                                over.fill();
+                                over.stroke();
 
-                            //Abre Qr
-                            java.awt.Image awtImage = Toolkit.getDefaultToolkit().createImage("C:\\temp\\codigoQR.png");
-                            Image image = Image.getInstance(awtImage, null);
-                            image.setAbsolutePosition(551, 8);
-                            over.addImage(image);
+                                //Abre Qr
+                                java.awt.Image awtImage = Toolkit.getDefaultToolkit().createImage("C:\\temp\\codigoQR.png");
+                                Image image = Image.getInstance(awtImage, null);
+                                image.setAbsolutePosition(551, 8);
+                                over.addImage(image);
 
-                            //imprime Texto
-                            over.beginText();
-                            over.setColorFill(BaseColor.BLACK);
-                            over.setFontAndSize(bf, 7);    // COLOR Y TAMANO
-                            over.setTextMatrix(550, 5);   // set x,y posiCION (0,0)
-                            over.showText(codigoQr);  // IMPRIME TEXTO
-                            over.endText();
+                                //imprime Texto
+                                over.beginText();
+                                over.setColorFill(BaseColor.BLACK);
+                                over.setFontAndSize(bf, 7);    // COLOR Y TAMANO
+                                over.setTextMatrix(550, 5);   // set x,y posiCION (0,0)
+                                over.showText(codigoQr);  // IMPRIME TEXTO
+                                over.endText();
+                            }
                         }
-                    }
-                } catch (Exception ex) {
-                    setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-                    lblIndicadorArx.setText("Error: " + ex);
-                    inhabilitarBtnGuardar();
-                }            
-                stamper.close(); //cierra archivo
-                
-            }else {
-                stamper.close();
-                conMalEscritos += 1; 
-                malEscrito.add("\n"+arx[i].getName());                
-            }            
+                    } catch (Exception ex) {
+                        setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                        lblIndicadorArx.setText("Error: " + ex);
+                        inhabilitarBtnGuardar();
+                    }            
+                    stamper.close(); //cierra archivo
+                }else {
+                    //stamper.close();
+                    conMalEscritos += 1; 
+                    malEscrito.add("\n"+arx[i].getName());                
+                }   
+            } else {
+                conEncontrados = conEncontrados+1; 
+                encontrados.add("\n"+arx[i].getName());
+                //JOptionPane.showMessageDialog(this, "El Archivo " + arx[i].getName() + "\nNo se puede cargar, ya que ha sido usado previamente.");//+vendor +", "+ factura + ", "+ vendor);
+            }             
         }
     }
 
