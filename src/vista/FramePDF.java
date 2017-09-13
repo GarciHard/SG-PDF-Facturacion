@@ -91,12 +91,16 @@ public class FramePDF extends javax.swing.JFrame {
     File folderManufacturing = new File(folder+"/Manufacturing");
     File folderLLC = new File(folder+"/LLC");
     File folderOtras = new File(folder+"/Otras");
+    File folderEdicionManual = new File (folder+"/Edicion Manual");
     
     /** Creates new form FramePDF */
     public FramePDF() {
         initComponents();
         pnlEdicionArx.setVisible(false);
         setSize(new Dimension(700, 210));
+        if (!folder.exists()) {
+            folder.mkdirs();            
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -344,9 +348,6 @@ public class FramePDF extends javax.swing.JFrame {
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         
-        if (!folder.exists()) {
-            folder.mkdirs();            
-        }
         if (!folderLLC.exists()){                
             folderLLC.mkdir();
         }
@@ -755,10 +756,13 @@ public class FramePDF extends javax.swing.JFrame {
     }
     
     private void edicionManual(float x, float y) throws WriterException, DocumentException, HeadlessException, IOException{
+        if (!folderEdicionManual.exists()){                
+            folderLLC.mkdir();
+        }
         try {
             BaseFont bf = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
             PdfReader reader = new PdfReader(arx[0].getPath());
-            stamper = new PdfStamper(reader, new FileOutputStream("C:/Users/GJA5TL/Documents/" + arx[0].getName(), true));
+            stamper = new PdfStamper(reader, new FileOutputStream(folderEdicionManual+"/"+arx[0].getName(), true));
             codigoQr = "XXX" + "-" + "000";
             generaQr();
             PdfContentByte over = stamper.getOverContent(1);
@@ -785,7 +789,7 @@ public class FramePDF extends javax.swing.JFrame {
             over.endText();
             stamper.close();
             reader.close();
-            crearVisorFactura("C:/Users/GJA5TL/Documents/" + arx[0].getName());
+            crearVisorFactura(folderEdicionManual+"/"+ arx[0].getName());
         } catch (WriterException | DocumentException | HeadlessException | IOException e) {
             throw e;
         }
