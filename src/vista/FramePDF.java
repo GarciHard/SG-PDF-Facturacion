@@ -233,74 +233,68 @@ public class FramePDF extends javax.swing.JFrame {
     }//GEN-LAST:event_btnBuscarFacturaActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        if (arxSize > 0){
-            try {
-                setCursor(new Cursor(Cursor.WAIT_CURSOR));
-                cargaArchivos();
-                setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-                //System.out.println(arxSize+" . "+conCargadosCorrectos);
-                if (arxSize == conCargadosCorrectos ){
-                    //System.out.println("-*1");
-                    JOptionPane.showMessageDialog(this, "("+conCargadosCorrectos+") Archivos Guardados Correctamente de ("+arxSize+")", "Mensaje",
+        try {
+            setCursor(new Cursor(Cursor.WAIT_CURSOR));
+            cargaArchivos();
+            setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+            //System.out.println(arxSize+" . "+conCargadosCorrectos);
+            if (arxSize == conCargadosCorrectos) {
+                //System.out.println("-*1");
+                JOptionPane.showMessageDialog(this, "(" + conCargadosCorrectos + ") Archivos Guardados Correctamente de (" + arxSize + ")", "Mensaje",
                         JOptionPane.INFORMATION_MESSAGE, new ImageIcon("src/img/bien.png"));
-                } else {
-                    if (conCargadosCorrectos != 0){
-                        if (conEncontrados  > 0  && conEncontrados <=3 && conMalEscritos > 0 && conMalEscritos <= 3 ){
+            } else {
+                if (conCargadosCorrectos != 0) {
+                    if (conEncontrados > 0 && conEncontrados <= 3 && conMalEscritos > 0 && conMalEscritos <= 3) {
                         //System.out.println("-*2");
-                        JOptionPane.showMessageDialog(this, "("+conCargadosCorrectos+") Archivos Guardados Correctamente de ("+arxSize+")"+
-                                "\n\n("+conEncontrados+") Archivos ya han sido usados previamente"+encontrados+
-                                "\n\n("+conMalEscritos+") Archivos estan mal escritos, favor de revisar"+malEscrito, "Mensaje",
-                            JOptionPane.INFORMATION_MESSAGE);
-                        } else if ((conEncontrados != 0 && conMalEscritos == 0) || conEncontrados > 3 ){
-                            //System.out.println("-*3");
-                            JOptionPane.showMessageDialog(this, "("+conCargadosCorrectos+") Archivos Guardados Correctamente de ("+arxSize+")"+
-                                    "\n\n("+conEncontrados+") Archivos ya han sido usados previamente"+encontrados, "Mensaje",
+                        JOptionPane.showMessageDialog(this, "(" + conCargadosCorrectos + ") Archivos Guardados Correctamente de (" + arxSize + ")"
+                                + "\n\n(" + conEncontrados + ") Archivos ya han sido usados previamente" + encontrados
+                                + "\n\n(" + conMalEscritos + ") Archivos estan mal escritos, favor de revisar" + malEscrito, "Mensaje",
                                 JOptionPane.INFORMATION_MESSAGE);
-                        } else if ((conEncontrados == 0 && conMalEscritos != 0) || conEncontrados > 3 ){
-                            //System.out.println("-*4");
-                            JOptionPane.showMessageDialog(this, "("+conCargadosCorrectos+") Archivos Guardados Correctamente de ("+arxSize+")"+                            
-                                    "\n\n("+conMalEscritos+") Archivos estan mal escritos, favor de revisar"+malEscrito, "Mensaje",
+                    } else if ((conEncontrados != 0 && conMalEscritos == 0) || conEncontrados > 3) {
+                        //System.out.println("-*3");
+                        JOptionPane.showMessageDialog(this, "(" + conCargadosCorrectos + ") Archivos Guardados Correctamente de (" + arxSize + ")"
+                                + "\n\n(" + conEncontrados + ") Archivos ya han sido usados previamente" + encontrados, "Mensaje",
                                 JOptionPane.INFORMATION_MESSAGE);
-                        } else {
-                            System.out.println("... cc"+conCargadosCorrectos+ "en "+conEncontrados+" mEs "+conMalEscritos);
-                        }
-                    }else {
-                        if (conEncontrados  > 0  && conEncontrados <= 3 && conMalEscritos > 0 && conMalEscritos <= 3 ){
+                    } else if ((conEncontrados == 0 && conMalEscritos != 0) || conEncontrados > 3) {
+                        //System.out.println("-*4");
+                        JOptionPane.showMessageDialog(this, "(" + conCargadosCorrectos + ") Archivos Guardados Correctamente de (" + arxSize + ")"
+                                + "\n\n(" + conMalEscritos + ") Archivos estan mal escritos, favor de revisar" + malEscrito, "Mensaje",
+                                JOptionPane.INFORMATION_MESSAGE);
+                    } else {
+                        System.out.println("... cc" + conCargadosCorrectos + "en " + conEncontrados + " mEs " + conMalEscritos);
+                    }
+                } else {
+                    if (conEncontrados > 0 && conEncontrados <= 3 && conMalEscritos > 0 && conMalEscritos <= 3) {
                         //System.out.println("+*2");
-                        JOptionPane.showMessageDialog(this, "("+conCargadosCorrectos+") Archivos Guardados Correctamente de ("+arxSize+")"+
-                                "\n\n("+conEncontrados+") Archivos ya han sido usados previamente"+encontrados+
-                                "\n\n("+conMalEscritos+") Archivos estan mal escritos, favor de revisar"+malEscrito, "Mensaje",
-                            JOptionPane.INFORMATION_MESSAGE);
-                        } else if ((conEncontrados != 0 && conMalEscritos == 0) || conEncontrados >3 ){
-                            //System.out.println("+*3");
-                            JOptionPane.showMessageDialog(this, "("+conCargadosCorrectos+") Archivos Guardados Correctamente de ("+arxSize+")"+
-                                    "\n\n("+conEncontrados+") Archivos ya han sido usados previamente"+encontrados, "Mensaje",
+                        JOptionPane.showMessageDialog(this, "(" + conCargadosCorrectos + ") Archivos Guardados Correctamente de (" + arxSize + ")"
+                                + "\n\n(" + conEncontrados + ") Archivos ya han sido usados previamente" + encontrados
+                                + "\n\n(" + conMalEscritos + ") Archivos estan mal escritos, favor de revisar" + malEscrito, "Mensaje",
                                 JOptionPane.INFORMATION_MESSAGE);
-                        } else if ((conEncontrados == 0 && conMalEscritos != 0) || conEncontrados >= 3 ){
-                            //System.out.println("+*4");
-                            JOptionPane.showMessageDialog(this, "("+conCargadosCorrectos+") Archivos Guardados Correctamente de ("+arxSize+")"+                            
-                                    "\n\n("+conMalEscritos+") Archivos estan mal escritos, favor de revisar"+malEscrito, "Mensaje",
+                    } else if ((conEncontrados != 0 && conMalEscritos == 0) || conEncontrados > 3) {
+                        //System.out.println("+*3");
+                        JOptionPane.showMessageDialog(this, "(" + conCargadosCorrectos + ") Archivos Guardados Correctamente de (" + arxSize + ")"
+                                + "\n\n(" + conEncontrados + ") Archivos ya han sido usados previamente" + encontrados, "Mensaje",
                                 JOptionPane.INFORMATION_MESSAGE);
-                        } else {
-                            System.out.println("... cc "+conCargadosCorrectos+ " en "+conEncontrados+" mEs "+conMalEscritos);
-                        }
+                    } else if ((conEncontrados == 0 && conMalEscritos != 0) || conEncontrados >= 3) {
+                        //System.out.println("+*4");
+                        JOptionPane.showMessageDialog(this, "(" + conCargadosCorrectos + ") Archivos Guardados Correctamente de (" + arxSize + ")"
+                                + "\n\n(" + conMalEscritos + ") Archivos estan mal escritos, favor de revisar" + malEscrito, "Mensaje",
+                                JOptionPane.INFORMATION_MESSAGE);
+                    } else {
+                        System.out.println("... cc " + conCargadosCorrectos + " en " + conEncontrados + " mEs " + conMalEscritos);
                     }
                 }
-                btnGuardar.setEnabled(false);
-                lblIndicadorArx.setText("");
-            } catch (WriterException | DocumentException | HeadlessException | IOException | InterruptedException e) {
-                setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-                lblIndicadorArx.setText("Error: " + e);
-                if (btnGuardar.isEnabled()) {
-                    btnGuardar.setEnabled(false);
-                }
-            }  
-            conCargadosCorrectos = 0;
-            conEncontrados = 0;
-            conMalEscritos = 0; 
-        } else {
-            JOptionPane.showMessageDialog(this,"No hay Archivos, no se puede Guardar","", JOptionPane.ERROR_MESSAGE);
+            }
+            btnGuardar.setEnabled(false);
+            lblIndicadorArx.setText("");
+        } catch (WriterException | DocumentException | HeadlessException | IOException | InterruptedException e) {
+            setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+            lblIndicadorArx.setText("Error: " + e);
+            inhabilitarBtnGuardar();
         }
+        conCargadosCorrectos = 0;
+        conEncontrados = 0;
+        conMalEscritos = 0;
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void mniEdicionManualActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniEdicionManualActionPerformed
@@ -347,14 +341,16 @@ public class FramePDF extends javax.swing.JFrame {
                             pdffile = new PDFFile(buf);
                             viewPage();
                             raf.close();
+                            setResizable(true);
                             lblIndicadorArx.setText("Nombre del archivo: " + arx[0].getName());
                             btnGuardar.setEnabled(true);
-                        } catch (Exception e) {
+                            JOptionPane.showMessageDialog(this, "Para visualizar mejor el documento\n"
+                                    + "maximize la ventana", "Sugerencia", JOptionPane.INFORMATION_MESSAGE
+                            );
+                        } catch (HeadlessException | IOException e) {
                             setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
                             lblIndicadorArx.setText("Error: " + e);
-                            if (btnGuardar.isEnabled()) {
-                                btnGuardar.setEnabled(false);
-                            }
+                            inhabilitarBtnGuardar();
                         }
                     } else if (opcion == JFileChooser.DIRECTORIES_ONLY) {
                         lblIndicadorArx.setText("Numero de archivos seleccionados: " + arxSize);
@@ -481,9 +477,7 @@ public class FramePDF extends javax.swing.JFrame {
                 } catch (Exception ex) {
                     setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
                     lblIndicadorArx.setText("Error: " + ex);
-                    if (btnGuardar.isEnabled()) {
-                        btnGuardar.setEnabled(false);
-                    }
+                    inhabilitarBtnGuardar();
                 }            
                 stamper.close(); //cierra archivo
                 
@@ -549,7 +543,10 @@ public class FramePDF extends javax.swing.JFrame {
         pnlPDF.setPreferredSize(new Dimension(700, 500));
         setPreferredSize(new Dimension(700, 500));
 
-        pnlBackground.add(pnlPDF, BorderLayout.CENTER);
+        pnlEdicionArx = new javax.swing.JPanel();
+        pnlEdicionArx.add(pnlPDF);
+        
+        pnlBackground.add(pnlEdicionArx, BorderLayout.CENTER);
 
         repaint();
         pack();
@@ -562,13 +559,20 @@ public class FramePDF extends javax.swing.JFrame {
 
     private void removePanelPDF() {
         if (pnlPDF != null) {
+            setResizable(false);
             pnlBackground.remove(pnlPDF);
             repaint();
-            setPreferredSize(new Dimension(700, 180));
+            setPreferredSize(new Dimension(700, 200));
             pack();
         }
     }
 
+    private void inhabilitarBtnGuardar() {
+        if (btnGuardar.isEnabled()) {
+            btnGuardar.setEnabled(false);
+        }
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscarFactura;
     private javax.swing.JButton btnGuardar;
