@@ -4,7 +4,6 @@ import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
-import com.itextpdf.text.BadElementException;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Image;
@@ -771,7 +770,7 @@ public class FramePDF extends javax.swing.JFrame {
             }
             
             stamper = new PdfStamper(reader, new FileOutputStream("C:/Users/GJA5TL/Documents/" + arx[0].getName()));
-            stamper = new PdfStamper(reader, new FileOutputStream(folderEdicionManual+"/"+arx[0].getName(), true));
+            //stamper = new PdfStamper(reader, new FileOutputStream(folderEdicionManual+"/"+arx[0].getName(), true));
             codigoQr = "XXX" + "-" + "000";
             generaQr();
             PdfContentByte over = stamper.getOverContent(1);
