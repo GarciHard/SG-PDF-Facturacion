@@ -49,6 +49,7 @@ public class FramePDF extends javax.swing.JFrame {
     private File f = null;
     
     private PagePanel pnlPDF;
+    private PDFPage page;
     private PDFFile pdffile;
     
     private static String URL = "";
@@ -102,11 +103,11 @@ public class FramePDF extends javax.swing.JFrame {
         lblIndicadorArx = new javax.swing.JLabel();
         pnlEdicionArx = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
-        jRadioButton3 = new javax.swing.JRadioButton();
-        jRadioButton4 = new javax.swing.JRadioButton();
+        rdbSuperiorIzq = new javax.swing.JRadioButton();
+        rdbInferiorIzq = new javax.swing.JRadioButton();
         jPanel2 = new javax.swing.JPanel();
-        jRadioButton1 = new javax.swing.JRadioButton();
-        jRadioButton2 = new javax.swing.JRadioButton();
+        rdbSuperiorDer = new javax.swing.JRadioButton();
+        rdbInferiorDer = new javax.swing.JRadioButton();
         pnlVisorFactura = new javax.swing.JPanel();
         mnuBarra = new javax.swing.JMenuBar();
         mnuEdicion = new javax.swing.JMenu();
@@ -189,9 +190,19 @@ public class FramePDF extends javax.swing.JFrame {
         pnlEdicionArx.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Visor Factura", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Calibri", 0, 18))); // NOI18N
         pnlEdicionArx.setPreferredSize(new java.awt.Dimension(700, 500));
 
-        buttonGroup1.add(jRadioButton3);
+        buttonGroup1.add(rdbSuperiorIzq);
+        rdbSuperiorIzq.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rdbSuperiorIzqActionPerformed(evt);
+            }
+        });
 
-        buttonGroup1.add(jRadioButton4);
+        buttonGroup1.add(rdbInferiorIzq);
+        rdbInferiorIzq.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rdbInferiorIzqActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -200,23 +211,33 @@ public class FramePDF extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap(150, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jRadioButton3, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jRadioButton4, javax.swing.GroupLayout.Alignment.TRAILING))
+                    .addComponent(rdbSuperiorIzq, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(rdbInferiorIzq, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jRadioButton3)
+                .addComponent(rdbSuperiorIzq)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jRadioButton4)
+                .addComponent(rdbInferiorIzq)
                 .addContainerGap())
         );
 
-        buttonGroup1.add(jRadioButton1);
+        buttonGroup1.add(rdbSuperiorDer);
+        rdbSuperiorDer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rdbSuperiorDerActionPerformed(evt);
+            }
+        });
 
-        buttonGroup1.add(jRadioButton2);
+        buttonGroup1.add(rdbInferiorDer);
+        rdbInferiorDer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rdbInferiorDerActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -225,17 +246,17 @@ public class FramePDF extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jRadioButton1)
-                    .addComponent(jRadioButton2))
+                    .addComponent(rdbSuperiorDer)
+                    .addComponent(rdbInferiorDer))
                 .addContainerGap(150, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jRadioButton1)
+                .addComponent(rdbSuperiorDer)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 76, Short.MAX_VALUE)
-                .addComponent(jRadioButton2)
+                .addComponent(rdbInferiorDer)
                 .addContainerGap())
         );
 
@@ -390,6 +411,22 @@ public class FramePDF extends javax.swing.JFrame {
         setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_mniEdicionCarpetaActionPerformed
 
+    private void rdbSuperiorIzqActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdbSuperiorIzqActionPerformed
+        
+    }//GEN-LAST:event_rdbSuperiorIzqActionPerformed
+
+    private void rdbInferiorIzqActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdbInferiorIzqActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_rdbInferiorIzqActionPerformed
+
+    private void rdbSuperiorDerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdbSuperiorDerActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_rdbSuperiorDerActionPerformed
+
+    private void rdbInferiorDerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdbInferiorDerActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_rdbInferiorDerActionPerformed
+
     private void abrirJFileChooser(Component parent, int opcion) {
         fchBuscarFactura = new JFileChooser();
         fchBuscarFactura.setDialogTitle("Buscar Facturas");
@@ -418,7 +455,6 @@ public class FramePDF extends javax.swing.JFrame {
                             raf.close();
                             setResizable(true);
                             lblIndicadorArx.setText("Nombre del archivo: " + arx[0].getName());
-                            btnGuardar.setEnabled(true);
                             JOptionPane.showMessageDialog(this, "Para visualizar mejor el documento\n"
                                     + "maximize la ventana", "Sugerencia", JOptionPane.INFORMATION_MESSAGE
                             );
@@ -618,7 +654,7 @@ public class FramePDF extends javax.swing.JFrame {
     private void viewPage() {
         pnlEdicionArx.setVisible(true);
         pnlPDF = new PagePanel();
-
+        
         pnlPDF.setPreferredSize(new Dimension(700, 500));
         setPreferredSize(new Dimension(700, 500));
         
@@ -629,7 +665,7 @@ public class FramePDF extends javax.swing.JFrame {
         repaint();
         pack();
 
-        PDFPage page = pdffile.getPage(1);
+        page = pdffile.getPage(1);
         pnlPDF.useZoomTool(false);
         pnlPDF.showPage(page);
         pnlPDF.repaint();
@@ -657,10 +693,6 @@ public class FramePDF extends javax.swing.JFrame {
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JRadioButton jRadioButton1;
-    private javax.swing.JRadioButton jRadioButton2;
-    private javax.swing.JRadioButton jRadioButton3;
-    private javax.swing.JRadioButton jRadioButton4;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JLabel lblIndicadorArx;
     private javax.swing.JMenuItem mniEdicionArchivo;
@@ -672,6 +704,10 @@ public class FramePDF extends javax.swing.JFrame {
     private javax.swing.JPanel pnlEdicionArx;
     private javax.swing.JPanel pnlIndicadorArx;
     private javax.swing.JPanel pnlVisorFactura;
+    private javax.swing.JRadioButton rdbInferiorDer;
+    private javax.swing.JRadioButton rdbInferiorIzq;
+    private javax.swing.JRadioButton rdbSuperiorDer;
+    private javax.swing.JRadioButton rdbSuperiorIzq;
     // End of variables declaration//GEN-END:variables
 
 }
