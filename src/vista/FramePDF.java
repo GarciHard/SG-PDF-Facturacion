@@ -12,7 +12,6 @@ import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfStamper;
-import com.itextpdf.text.pdf.PdfWriter;
 import com.sun.pdfview.PDFFile;
 import com.sun.pdfview.PDFPage;
 import com.sun.pdfview.PagePanel;
@@ -30,6 +29,8 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
@@ -760,8 +761,16 @@ public class FramePDF extends javax.swing.JFrame {
             folderLLC.mkdir();
         }
         try {
-            BaseFont bf = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
+            BaseFont bf = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.EMBEDDED);
             PdfReader reader = new PdfReader(arx[0].getPath());
+            
+            File PDF = new File("C:/Users/GJA5TL/Documents/" + arx[0].getName());
+            
+            if (PDF.exists()) {
+                Files.delete(Paths.get("C:/Users/GJA5TL/Documents/" + arx[0].getName()));
+            }
+            
+            stamper = new PdfStamper(reader, new FileOutputStream("C:/Users/GJA5TL/Documents/" + arx[0].getName()));
             stamper = new PdfStamper(reader, new FileOutputStream(folderEdicionManual+"/"+arx[0].getName(), true));
             codigoQr = "XXX" + "-" + "000";
             generaQr();
