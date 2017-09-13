@@ -92,7 +92,7 @@ public class FramePDF extends javax.swing.JFrame {
     File folderManufacturing = new File(folder+"/Manufacturing");
     File folderLLC = new File(folder+"/LLC");
     File folderOtras = new File(folder+"/Otras");
-    File folderEdicionManual = new File (folder+"/Edicion Manual");
+    File folderEdicionManual = new File (folder+"/Edicion");
     
     /** Creates new form FramePDF */
     public FramePDF() {
@@ -446,12 +446,18 @@ public class FramePDF extends javax.swing.JFrame {
     }//GEN-LAST:event_mniEdicionManualActionPerformed
 
     private void mniEdicionArchivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniEdicionArchivoActionPerformed
+        if (!folderEdicionManual.exists()){
+            folderEdicionManual.mkdir();
+        }
         setCursor(new Cursor(Cursor.WAIT_CURSOR));
         abrirJFileChooser(this, JFileChooser.FILES_ONLY);
         setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_mniEdicionArchivoActionPerformed
 
     private void mniEdicionCarpetaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniEdicionCarpetaActionPerformed
+        if (!folderEdicionManual.exists()){
+            folderEdicionManual.mkdir();
+        }
         removePanelPDF();
         setCursor(new Cursor(Cursor.WAIT_CURSOR));
         abrirJFileChooser(this, JFileChooser.DIRECTORIES_ONLY);
@@ -777,9 +783,6 @@ public class FramePDF extends javax.swing.JFrame {
     }
     
     private void edicionManual(float x, float y) throws WriterException, DocumentException, HeadlessException, IOException{
-        if (!folderEdicionManual.exists()){                
-            folderLLC.mkdir();
-        }
         try {
             BaseFont bf = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.EMBEDDED);
             PdfReader reader = new PdfReader(arx[0].getPath());
