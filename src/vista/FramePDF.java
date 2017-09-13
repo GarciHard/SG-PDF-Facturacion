@@ -446,13 +446,7 @@ public class FramePDF extends javax.swing.JFrame {
                 if (arxSize > 0) {
                     if (opcion == JFileChooser.FILES_ONLY) {
                         try {
-                            File file = new File(arx[0].getAbsolutePath());
-                            RandomAccessFile raf = new RandomAccessFile(file, "r");
-                            FileChannel channel = raf.getChannel();
-                            ByteBuffer buf = channel.map(FileChannel.MapMode.READ_ONLY, 0, channel.size());
-                            pdffile = new PDFFile(buf);
-                            viewPage();
-                            raf.close();
+                            crearVisorFactura(arx[0].getAbsolutePath());
                             setResizable(true);
                             lblIndicadorArx.setText("Nombre del archivo: " + arx[0].getName());
                             JOptionPane.showMessageDialog(this, "Para visualizar mejor el documento\n"
@@ -687,6 +681,19 @@ public class FramePDF extends javax.swing.JFrame {
         }
     }
     
+    private void crearVisorFactura(String pathFile)throws HeadlessException, IOException {
+        try {
+            File file = new File(pathFile);
+            RandomAccessFile raf = new RandomAccessFile(file, "r");
+            FileChannel channel = raf.getChannel();
+            ByteBuffer buf = channel.map(FileChannel.MapMode.READ_ONLY, 0, channel.size());
+            pdffile = new PDFFile(buf);
+            viewPage();
+            raf.close();
+        } catch (HeadlessException | IOException e) {
+            throw e;
+        }
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscarFactura;
     private javax.swing.JButton btnGuardar;
