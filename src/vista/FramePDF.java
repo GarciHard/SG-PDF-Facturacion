@@ -76,9 +76,15 @@ public class FramePDF extends javax.swing.JFrame {
     static String service = "G8F0";
     static String llc = "G9C0";
     
+    //CONTADORES PARA AVISOS
+    static int conEncontrados = 0;
+    static int conMalEscritos = 0;
+    static int conCargadosCorrectos = 0; 
     //
     private ArrayList encontrados = new ArrayList(); 
     private ArrayList malEscrito = new ArrayList();
+    
+    PdfStamper stamper ;
     
     /** Creates new form FramePDF */
     public FramePDF() {
@@ -232,21 +238,74 @@ public class FramePDF extends javax.swing.JFrame {
     }//GEN-LAST:event_btnBuscarFacturaActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        try {
-            setCursor(new Cursor(Cursor.WAIT_CURSOR));
-            cargaArchivos();
-            setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-            JOptionPane.showMessageDialog(this, "Datos Guardados Correctamente", "Mensaje",
-                    JOptionPane.INFORMATION_MESSAGE, new ImageIcon("src/img/bien.png"));
-            btnGuardar.setEnabled(false);
-            lblIndicadorArx.setText("");
-        } catch (WriterException | DocumentException | HeadlessException | IOException | InterruptedException e) {
-            setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-            lblIndicadorArx.setText("Error: " + e);
-            if (btnGuardar.isEnabled()) {
+        if (arxSize > 0){
+            try {
+                setCursor(new Cursor(Cursor.WAIT_CURSOR));
+                cargaArchivos();
+                setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                //System.out.println(arxSize+" . "+conCargadosCorrectos);
+                if (arxSize == conCargadosCorrectos ){
+                    //System.out.println("-*1");
+                    JOptionPane.showMessageDialog(this, "("+conCargadosCorrectos+") Archivos Guardados Correctamente de ("+arxSize+")", "Mensaje",
+                        JOptionPane.INFORMATION_MESSAGE, new ImageIcon("src/img/bien.png"));
+                } else {
+                    if (conCargadosCorrectos != 0){
+                        if (conEncontrados  > 0  && conEncontrados <=3 && conMalEscritos > 0 && conMalEscritos <= 3 ){
+                        //System.out.println("-*2");
+                        JOptionPane.showMessageDialog(this, "("+conCargadosCorrectos+") Archivos Guardados Correctamente de ("+arxSize+")"+
+                                "\n\n("+conEncontrados+") Archivos ya han sido usados previamente"+encontrados+
+                                "\n\n("+conMalEscritos+") Archivos estan mal escritos, favor de revisar"+malEscrito, "Mensaje",
+                            JOptionPane.INFORMATION_MESSAGE);
+                        } else if ((conEncontrados != 0 && conMalEscritos == 0) || conEncontrados > 3 ){
+                            //System.out.println("-*3");
+                            JOptionPane.showMessageDialog(this, "("+conCargadosCorrectos+") Archivos Guardados Correctamente de ("+arxSize+")"+
+                                    "\n\n("+conEncontrados+") Archivos ya han sido usados previamente"+encontrados, "Mensaje",
+                                JOptionPane.INFORMATION_MESSAGE);
+                        } else if ((conEncontrados == 0 && conMalEscritos != 0) || conEncontrados > 3 ){
+                            //System.out.println("-*4");
+                            JOptionPane.showMessageDialog(this, "("+conCargadosCorrectos+") Archivos Guardados Correctamente de ("+arxSize+")"+                            
+                                    "\n\n("+conMalEscritos+") Archivos estan mal escritos, favor de revisar"+malEscrito, "Mensaje",
+                                JOptionPane.INFORMATION_MESSAGE);
+                        } else {
+                            System.out.println("... cc"+conCargadosCorrectos+ "en "+conEncontrados+" mEs "+conMalEscritos);
+                        }
+                    }else {
+                        if (conEncontrados  > 0  && conEncontrados <= 3 && conMalEscritos > 0 && conMalEscritos <= 3 ){
+                        //System.out.println("+*2");
+                        JOptionPane.showMessageDialog(this, "("+conCargadosCorrectos+") Archivos Guardados Correctamente de ("+arxSize+")"+
+                                "\n\n("+conEncontrados+") Archivos ya han sido usados previamente"+encontrados+
+                                "\n\n("+conMalEscritos+") Archivos estan mal escritos, favor de revisar"+malEscrito, "Mensaje",
+                            JOptionPane.INFORMATION_MESSAGE);
+                        } else if ((conEncontrados != 0 && conMalEscritos == 0) || conEncontrados >3 ){
+                            //System.out.println("+*3");
+                            JOptionPane.showMessageDialog(this, "("+conCargadosCorrectos+") Archivos Guardados Correctamente de ("+arxSize+")"+
+                                    "\n\n("+conEncontrados+") Archivos ya han sido usados previamente"+encontrados, "Mensaje",
+                                JOptionPane.INFORMATION_MESSAGE);
+                        } else if ((conEncontrados == 0 && conMalEscritos != 0) || conEncontrados >= 3 ){
+                            //System.out.println("+*4");
+                            JOptionPane.showMessageDialog(this, "("+conCargadosCorrectos+") Archivos Guardados Correctamente de ("+arxSize+")"+                            
+                                    "\n\n("+conMalEscritos+") Archivos estan mal escritos, favor de revisar"+malEscrito, "Mensaje",
+                                JOptionPane.INFORMATION_MESSAGE);
+                        } else {
+                            System.out.println("... cc "+conCargadosCorrectos+ " en "+conEncontrados+" mEs "+conMalEscritos);
+                        }
+                    }
+                }
                 btnGuardar.setEnabled(false);
-            }
-        }       
+                lblIndicadorArx.setText("");
+            } catch (WriterException | DocumentException | HeadlessException | IOException | InterruptedException e) {
+                setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                lblIndicadorArx.setText("Error: " + e);
+                if (btnGuardar.isEnabled()) {
+                    btnGuardar.setEnabled(false);
+                }
+            }  
+            conCargadosCorrectos = 0;
+            conEncontrados = 0;
+            conMalEscritos = 0; 
+        } else {
+            JOptionPane.showMessageDialog(this,"No hay Archivos, no se puede Guardar","", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void mniEdicionManualActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniEdicionManualActionPerformed
@@ -325,13 +384,7 @@ public class FramePDF extends javax.swing.JFrame {
     }
 
     public void cargaArchivos () throws BadElementException, IOException, DocumentException, WriterException, InterruptedException{
-        //int hoja[] = new int[100];
-        //int ultPag = 0;
-        //int vcons;
-        //String val = "";
-        
-        PdfStamper stamper ;
-        
+        int bnPermisoCarga = 0;
         BaseFont bf = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
         
         for (int i = 0; i < arxSize; i++) { //para los archivos
@@ -341,7 +394,7 @@ public class FramePDF extends javax.swing.JFrame {
             String nombres = arx[i].getName();
             String[] arrayNombres = nombres.split("_");
 
-            // En este momento tenemos un array en el que cada elemento es un color.
+            // SE HACEN LOS CORTES PARA OBTENER LOS VALORES DE VENDOR, FACTURA, COMPANIA
             for (int n = 0; n < arrayNombres.length; n++) {
                 if (n == 0) {
                     vendor = arrayNombres[n];
@@ -352,97 +405,109 @@ public class FramePDF extends javax.swing.JFrame {
                 }
             }
                         
-            /**************************************************************/
-            if (compania.contains(service)){
-                compania = service;
-                System.out.println(compania+" service "+i+" "+arx[i].getName());
-                stamper = new PdfStamper(reader, new  FileOutputStream("C:/Users/PRR1TL/Desktop/Rutas/Service/"+arx[i].getName()));
-            } else if (compania.contains(llc)){
-                compania = llc;
-                System.out.println(compania+" llc "+i+" "+arx[i].getName());
-                stamper = new PdfStamper(reader, new  FileOutputStream("C:/Users/PRR1TL/Desktop/Rutas/LLC/"+arx[i].getName())) ;
-            } else if (compania.equals(manufacturing)){
-                compania = manufacturing;
-                System.out.println(compania+" manufacturing " +i);
-                stamper = new PdfStamper(reader, new  FileOutputStream("C:/Users/PRR1TL/Desktop/Rutas/Manufacturing/"+arx[i].getName()));
+            /******RUTAS DE GUARDADO DE ACUERDO A LA COMPANIA****************************/
+            if (compania.length() < 7 ){
+                //conCargadosCorrectos += 1;
+                if (compania.contains(service)){
+                    compania = service;
+                    //System.out.println(compania+" service "+i+" "+arx[i].getName());
+                    stamper = new PdfStamper(reader, new  FileOutputStream("C:/Users/PRR1TL/Desktop/Rutas/Service/"+arx[i].getName()));
+                } else if (compania.contains(llc)){
+                    compania = llc;
+                    //System.out.println(compania+" llc "+i+" "+arx[i].getName());
+                    stamper = new PdfStamper(reader, new  FileOutputStream("C:/Users/PRR1TL/Desktop/Rutas/LLC/"+arx[i].getName())) ;
+                } else if (compania.equals(manufacturing)){
+                    compania = manufacturing;
+                    //System.out.println(compania+" manufacturing " +i+" "+arx[i].getName());
+                    stamper = new PdfStamper(reader, new  FileOutputStream("C:/Users/PRR1TL/Desktop/Rutas/Manufacturing/"+arx[i].getName()));
+                }else {
+                    stamper = new PdfStamper(reader, new  FileOutputStream("C:/Users/PRR1TL/Desktop/Rutas/"+arx[i].getName()));
+                }
+                
+                //CARGA LOS ARCHIVOS
+                
+                for (int pag = 0; pag <= reader.getNumberOfPages(); pag++) {
+                    if (pag == 1) {
+                        codigoQr = compania + "-" + consecutivos;
+                        generaQr();
+                        PdfContentByte over = stamper.getOverContent(pag);
+
+                        //Imprime Rectangulo
+                        over.setColorStroke(BaseColor.BLACK);
+                        over.setColorFill(BaseColor.WHITE);
+                        over.rectangle(538, 5, 70, 45);
+                        over.fill();
+                        over.stroke();
+
+                        //Abre Qr
+                        java.awt.Image awtImage = Toolkit.getDefaultToolkit().createImage("C:\\temp\\codigoQR.png");
+                        Image image = Image.getInstance(awtImage, null);
+                        image.setAbsolutePosition(551, 8);
+                        over.addImage(image);
+
+                        //imprime Texto
+                        over.beginText();
+                        over.setColorFill(BaseColor.BLACK);
+                        over.setFontAndSize(bf, 7);    // COLOR Y TAMANO
+                        over.setTextMatrix(570, 5);   // set x,y posiCION (0,0)
+                        over.showText(codigoQr);  // IMPRIME TEXTO
+                        over.endText();
+                    }
+                }
+
+                /************EVALUA QUE LOS ARCHIVOS NO HAYAN SIDO MODIFICADOS PREVIAMENTE**************************/
+
+                try {
+                    if (registro.validaArchivoExistente(vendor, factura, compania) == 0) {
+                        if (registro.consultaUltimoConsecutivo(compania, factura) == null) {
+                            consecutivos = "000000";
+                            registra();
+                        } else {
+                            consecu = registro.consultaUltimoConsecutivo(compania, factura);
+                            int con = Integer.parseInt(consecu);
+                            consecutivos = Integer.toString(con + 1);                  
+
+                            if (consecutivos.length() < 6) {
+                                if (consecutivos.length() == 1) {
+                                    consecutivos = "00000" + consecutivos;
+                                } else if (consecutivos.length() == 2) {
+                                    consecutivos = "0000" + consecutivos;
+                                } else if (consecutivos.length() == 3) {
+                                    consecutivos = "000" + consecutivos;
+                                } else if (consecutivos.length() == 4) {
+                                    consecutivos = "00" + consecutivos;
+                                } else if (consecutivos.length() == 5) {
+                                    consecutivos = "0" + consecutivos;
+                                }
+                            }
+                            if (consecutivos.length() == 6) {
+                                registra();
+                            }
+                        }
+
+                    } else {
+                        conEncontrados = conEncontrados+1; 
+                        encontrados.add("\n"+arx[i].getName());
+                        //JOptionPane.showMessageDialog(this, "El Archivo " + arx[i].getName() + "\nNo se puede cargar, ya que ha sido usado previamente.");//+vendor +", "+ factura + ", "+ vendor);
+                    }
+                } catch (Exception ex) {
+                    setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                    lblIndicadorArx.setText("Error: " + ex);
+                    if (btnGuardar.isEnabled()) {
+                        btnGuardar.setEnabled(false);
+                    }
+                }            
+                stamper.close(); //cierra archivo
+                
             }else {
-                malEscrito.add(arx[i].getName());
-                stamper = new PdfStamper(reader, new  FileOutputStream("C:/Users/PRR1TL/Desktop/Rutas/"+arx[i].getName()));
+                conMalEscritos += 1; 
+                malEscrito.add("\n"+arx[i].getName());
+                stamper = new PdfStamper(reader, new  FileOutputStream("C:/Users/PRR1TL/Desktop/Rutas/MalEscritos"+arx[i].getName()));
                 stamper.close();
             }
             
             //stamper = new PdfStamper(reader, new  FileOutputStream("C:/Users/PRR1TL/Desktop/Rutas/"+arx[i].getName()));
             /*************************************************************/
-            for (int pag = 0; pag <= reader.getNumberOfPages(); pag++) {
-                if (pag == 1) {
-                    codigoQr = compania + "-" + consecutivos;
-                    generaQr();
-                    PdfContentByte over = stamper.getOverContent(pag);
-
-                    //Imprime Rectangulo
-                    over.setColorStroke(BaseColor.BLACK);
-                    over.setColorFill(BaseColor.WHITE);
-                    over.rectangle(538, 5, 70, 45);
-                    over.fill();
-                    over.stroke();
-                    
-                    //Abre Qr
-                    java.awt.Image awtImage = Toolkit.getDefaultToolkit().createImage("C:\\temp\\codigoQR.png");
-                    Image image = Image.getInstance(awtImage, null);
-                    image.setAbsolutePosition(551, 8);
-                    over.addImage(image);
-                    
-                    //imprime Texto
-                    over.beginText();
-                    over.setColorFill(BaseColor.BLACK);
-                    over.setFontAndSize(bf, 7);    // set font and size
-                    over.setTextMatrix(540, 5);   // set x,y position (0,0 is at the bottom left)
-                    over.showText(codigoQr);  // set text
-                    over.endText();
-                }
-            }
-
-            try {
-                if (registro.validaArchivoExistente(vendor, factura, compania) == 0) {
-                    if (registro.consultaUltimoConsecutivo(compania, factura) == null) {
-                        consecutivos = "000000";
-                        registra();
-                    } else {
-                        consecu = registro.consultaUltimoConsecutivo(compania, factura);
-                        int con = Integer.parseInt(consecu);
-                        consecutivos = Integer.toString(con + 1);                  
-                        
-                        if (consecutivos.length() < 6) {
-                            if (consecutivos.length() == 1) {
-                                consecutivos = "00000" + consecutivos;
-                            } else if (consecutivos.length() == 2) {
-                                consecutivos = "0000" + consecutivos;
-                            } else if (consecutivos.length() == 3) {
-                                consecutivos = "000" + consecutivos;
-                            } else if (consecutivos.length() == 4) {
-                                consecutivos = "00" + consecutivos;
-                            } else if (consecutivos.length() == 5) {
-                                consecutivos = "0" + consecutivos;
-                            }
-                        }
-                        if (consecutivos.length() == 6) {
-                            registra();
-                        }
-                    }
-
-                } else {
-                    encontrados.add(arx[i].getName());
-                    //JOptionPane.showMessageDialog(this, "El Archivo " + arx[i].getName() + "\nNo se puede cargar, ya que ha sido usado previamente.");//+vendor +", "+ factura + ", "+ vendor);
-                }
-            } catch (Exception ex) {
-                setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-                lblIndicadorArx.setText("Error: " + ex);
-                if (btnGuardar.isEnabled()) {
-                    btnGuardar.setEnabled(false);
-                }
-            }
-            
-            stamper.close(); //cierra archivo
         }
     }
 
@@ -472,6 +537,10 @@ public class FramePDF extends javax.swing.JFrame {
     }
 
     public static void registra () throws Exception{
+        
+        conCargadosCorrectos += 1;
+        //System.out.println(conCargadosCorrectos);
+        
         Object[] reg = new Object[4];
         try {
             reg[0] = vendor;
