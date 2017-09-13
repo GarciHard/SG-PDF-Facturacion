@@ -38,6 +38,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.commons.io.FileUtils;
 
 /**
  * Hecho con <3 por:
@@ -86,7 +87,7 @@ public class FramePDF extends javax.swing.JFrame {
     PdfStamper stamper ;
     
      /*****************RUTAS DE GUARDADO **********************/
-    File folder = new File("C:/Users/PRR1TL/Desktop/Rutas");
+    File folder = new File("C:/Users/GJA5TL/Desktop/Rutas");
     File folderServer = new File(folder+"/Service");
     File folderManufacturing = new File(folder+"/Manufacturing");
     File folderLLC = new File(folder+"/LLC");
@@ -745,11 +746,31 @@ public class FramePDF extends javax.swing.JFrame {
             case "_rdbSuperiorDer":
                 try {
                     inhabilitarBtnGuardar();
-                    edicionManual(page.getWidth() - 70, page.getHeight() - 45);
+                    edicionManual(page.getWidth() - 62, page.getHeight() - 45);
                     btnGuardar.setEnabled(true);
                 } catch (WriterException | DocumentException | HeadlessException | IOException e) {
                     //Exception
                     System.out.println("der " + e);
+                }
+                break;
+            case "_rdbInferiorIzq":
+                try {
+                    inhabilitarBtnGuardar();
+                    edicionManual(8, 5);
+                    btnGuardar.setEnabled(true);
+                } catch (WriterException | DocumentException | HeadlessException | IOException e) {
+                    //Exception
+                    System.out.println("Izq " + e);
+                }
+                break;
+            case "_rdbInferiorDer":
+                try {
+                    inhabilitarBtnGuardar();
+                    edicionManual(page.getWidth() - 62, 5);
+                    btnGuardar.setEnabled(true);
+                } catch (WriterException | DocumentException | HeadlessException | IOException e) {
+                    //Exception
+                    System.out.println("Izq " + e);
                 }
                 break;
         }
@@ -762,15 +783,8 @@ public class FramePDF extends javax.swing.JFrame {
         try {
             BaseFont bf = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.EMBEDDED);
             PdfReader reader = new PdfReader(arx[0].getPath());
-            
-            File PDF = new File("C:/Users/GJA5TL/Documents/" + arx[0].getName());
-            
-            if (PDF.exists()) {
-                Files.delete(Paths.get("C:/Users/GJA5TL/Documents/" + arx[0].getName()));
-            }
-            
-            stamper = new PdfStamper(reader, new FileOutputStream("C:/Users/GJA5TL/Documents/" + arx[0].getName()));
-            //stamper = new PdfStamper(reader, new FileOutputStream(folderEdicionManual+"/"+arx[0].getName(), true));
+                                 
+            stamper = new PdfStamper(reader, new FileOutputStream(folderEdicionManual+"/"+arx[0].getName(), true));
             codigoQr = "XXX" + "-" + "000";
             generaQr();
             PdfContentByte over = stamper.getOverContent(1);
