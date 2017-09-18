@@ -70,20 +70,12 @@ public abstract class LectorPdf extends JFrame implements ActionListener {
                     if(select == JFileChooser.APPROVE_OPTION){
                         try {
                             
-                            File file = new File(
-                                    chooser.getSelectedFile().getAbsolutePath()); 
-                            System.err.println("file: "+file);
-                            // Ubicación del archivo pdf
+                            File file = new File(chooser.getSelectedFile().getAbsolutePath()); 
                             RandomAccessFile raf = new RandomAccessFile(file, "r");
                             FileChannel channel = raf.getChannel();
 
                             ByteBuffer buf = channel.map(FileChannel.MapMode.READ_ONLY, 0,channel.size());
                             pdffile = new PDFFile(buf);
-                            //obtenemos el total de paginas que tiene el documento
-                            paginas = pdffile.getNumPages();
-                            //posicionamos pagina en la ultima 
-                            pagina = paginas;
-                            //solo abrimos
                             viewPage();
                             raf.close();
                         }catch (Exception e) {
