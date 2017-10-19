@@ -88,8 +88,8 @@ public class FramePDF extends javax.swing.JFrame {
     
     PdfStamper stamper ;
     
-     /*****************RUTAS DE GUARDADO **********************/
-    //File folder = new File ("C:/Users/PRR1TL/Desktop/Rutas");
+    /*****************RUTAS DE GUARDADO **********************/
+    //File folder = new File ("C:/Users/PRR1TL/Desktop/NEW 69C0");
     File folder = new File ("C:/Users/AJN1TL/Desktop/NEW 69C0");
     //File folder = new File("I:/Dept/MOE1/Restricted/CTG/AP/SG Information/Proveedores 10 años/APM Prueba");
     File folderServer = new File(folder+"/68F0");

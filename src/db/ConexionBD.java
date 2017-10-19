@@ -25,13 +25,15 @@ public class ConexionBD {
     
     private final String urlDB = "jdbc:ucanaccess://" + "C:/Users/AJN1TL/Desktop/dbFacturas.accdb";
     
+    //private final String urlDB = "jdbc:ucanaccess://" + "C:/Users/PRR1TL/Desktop/dbFacturas.accdb";
+    
     //JUAN CARLOS
     //private final String urlDB = "jdbc:ucanaccess://" + "I:/Dept/MOE1/Restricted/CTG/AP/SG Information/Proveedores 10 años/APM Prueba/db/dbFacturas.accdb";
     
     public void conectar() throws Exception {
         try {
+            Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
             conexion = DriverManager.getConnection(urlDB);
-            Class.forName(driverJDBC);
         } catch (ClassNotFoundException | SQLException e) {
             throw e;
         }
