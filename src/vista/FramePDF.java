@@ -782,12 +782,12 @@ public class FramePDF extends javax.swing.JFrame {
                                 if (registro.validaArchivoExistente(vendor, factura, compania) == 0) { 
                                     bnArchivoUsado = 0;
                                     if (compania.length() <= 7 ){
-                                        System.out.println(registro.consultaUltimoConsecutivo(compania, factura));
-                                        if (registro.consultaUltimoConsecutivo(compania, factura) == null) {
+                                        System.out.println(registro.consultaUltimoConsecutivo(vendor, compania));
+                                        if (registro.consultaUltimoConsecutivo(vendor, compania) == null) {
                                             consecutivos = "000000";
                                             //registra();
                                         } else {
-                                            consecu = registro.consultaUltimoConsecutivo(compania, factura);
+                                            consecu = registro.consultaUltimoConsecutivo(vendor, compania);
                                             int con = Integer.parseInt(consecu);
                                             consecutivos = Integer.toString(con + 1);                  
 
@@ -893,11 +893,11 @@ public class FramePDF extends javax.swing.JFrame {
                     /************EVALUA QUE LOS ARCHIVOS NO HAYAN SIDO MODIFICADOS PREVIAMENTE**************************/
 
                     try {
-                        if (registro.consultaUltimoConsecutivo(compania, factura) == null) {
+                        if (registro.consultaUltimoConsecutivo(vendor, compania) == null) {
                             consecutivos = "000000";
                             registra();
                         } else {
-                            consecu = registro.consultaUltimoConsecutivo(compania, factura);
+                            consecu = registro.consultaUltimoConsecutivo(vendor, compania);
                             int con = Integer.parseInt(consecu);
                             consecutivos = Integer.toString(con + 1);                  
 

@@ -17,7 +17,7 @@ public class RegistrosDAOImpl extends ConexionBD implements RegistrosDAO{
 
     private final String REGISTRO = "INSERT INTO registros (Vendor, Factura, Compania, consecutivo) VALUES (?,?,?,?)";
     private final String CONSULTA_EXISTENCIA_DOC = "SELECT vendor, factura, compania FROM registros WHERE vendor LIKE ? AND factura LIKE ? AND compania LIKE ?";
-    private final String CONSULTA_CONSECUTIVO = "SELECT Max(consecutivo)FROM registros WHERE compania LIKE ? AND factura LIKE ? ";
+    private final String CONSULTA_CONSECUTIVO = "SELECT Max(consecutivo)FROM registros WHERE vendor LIKE ? AND compania LIKE ? ";
     //private final String CONSULTA_CONSECUTIVO = " SELECT Max(consecutivo) AS Expr1 FROM registros WHERE (((registros.[compania]) LIKE ? ) AND ((registros.[factura]) LIKE ? ))";
     @Override
     public void registroFactura(Object[] factura) throws Exception {        
