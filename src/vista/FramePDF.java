@@ -89,11 +89,14 @@ public class FramePDF extends javax.swing.JFrame {
     PdfStamper stamper ;
     
      /*****************RUTAS DE GUARDADO **********************/
-    File folder = new File("C:/Users/PRR1TL/Desktop/Rutas");
-    File folderServer = new File(folder+"/Service");
-    File folderManufacturing = new File(folder+"/Manufacturing");
-    File folderLLC = new File(folder+"/LLC");
+    //File folder = new File ("C:/Users/PRR1TL/Desktop/Rutas");
+    File folder = new File ("C:/Users/AJN1TL/Desktop/NEW 69C0");
+    //File folder = new File("I:/Dept/MOE1/Restricted/CTG/AP/SG Information/Proveedores 10 años/APM Prueba");
+    File folderServer = new File(folder+"/68F0");
+    File folderManufacturing = new File(folder+"/68D0");
+    File folderLLC = new File(folder+"/69C0");
     File folderOtras = new File(folder+"/Otras");
+    File folderTemp = new File("C:/temp");
     File folderEdicionManual = new File (folder+"/Edicion");
     File archivoEditado;
     Process p ;
@@ -108,6 +111,9 @@ public class FramePDF extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         if (!folder.exists()) {
             folder.mkdirs();            
+        }
+        if(!folderTemp.exists()){
+            folder.mkdirs();
         }
     }
 
@@ -479,7 +485,6 @@ public class FramePDF extends javax.swing.JFrame {
                 PdfReader reader = new PdfReader(arx[0].getPath());
                 /************EVALUA QUE LOS ARCHIVOS NO HAYAN SIDO MODIFICADOS PREVIAMENTE**************************/
                 try {
-
                     archivoEditado = new File(folderEdicionManual+"/"+arx[0].getName());
                     arched = archivoEditado;
                     System.out.println("ar "+arched.getAbsolutePath());
@@ -503,6 +508,7 @@ public class FramePDF extends javax.swing.JFrame {
                             }
                             removePanelPDF();
                         }else{
+                            
                             this.setVisible(true);
                             p = Runtime.getRuntime().exec("taskkill /f /im AcroRd32.exe") ;
                             archivoEditado.delete();
@@ -521,6 +527,9 @@ public class FramePDF extends javax.swing.JFrame {
                             } catch (HeadlessException | IOException ex) {
                                 Logger.getLogger(FramePDF.class.getName()).log(Level.SEVERE, null, ex);
                             }
+                            while (archivoEditado.exists()){
+                                archivoEditado.delete();
+                            }
                         } 
                     } catch (InterruptedException ex) {
                         Logger.getLogger(FramePDF.class.getName()).log(Level.SEVERE, null, ex);
@@ -536,6 +545,7 @@ public class FramePDF extends javax.swing.JFrame {
                 Logger.getLogger(FramePDF.class.getName()).log(Level.SEVERE, null, ex);
             } 
         }
+        
     }//GEN-LAST:event_rdbSuperiorIzqActionPerformed
 
     private void rdbInferiorIzqActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdbInferiorIzqActionPerformed
@@ -585,6 +595,9 @@ public class FramePDF extends javax.swing.JFrame {
                                 this.setExtendedState(MAXIMIZED_BOTH);
                             } catch (HeadlessException | IOException ex) {
                                 Logger.getLogger(FramePDF.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                            while (archivoEditado.exists()){
+                                archivoEditado.delete();
                             }
                         }          
                     } catch (InterruptedException ex) {
@@ -647,6 +660,9 @@ public class FramePDF extends javax.swing.JFrame {
                         } catch (HeadlessException | IOException ex) {
                             Logger.getLogger(FramePDF.class.getName()).log(Level.SEVERE, null, ex);
                         }
+                        while (archivoEditado.exists()){
+                                archivoEditado.delete();
+                            }
                     }          
                 } catch (InterruptedException ex) {
                     Logger.getLogger(FramePDF.class.getName()).log(Level.SEVERE, null, ex);
@@ -705,6 +721,9 @@ public class FramePDF extends javax.swing.JFrame {
                         } catch (HeadlessException | IOException ex) {
                             Logger.getLogger(FramePDF.class.getName()).log(Level.SEVERE, null, ex);
                         }
+                        while (archivoEditado.exists()){
+                                archivoEditado.delete();
+                            }
                     }          
                 } catch (InterruptedException ex) {
                     Logger.getLogger(FramePDF.class.getName()).log(Level.SEVERE, null, ex);
@@ -738,15 +757,12 @@ public class FramePDF extends javax.swing.JFrame {
                 if (arxSize > 0) {
                     if (opcion == JFileChooser.FILES_ONLY) {
                         try {
-                            //crearVisorFactura(arx[0].getAbsolutePath());
-                            lblIndicadorArx.setText("Nombre del archivo: " + arx[0].getPath());
-                             
-                            // Evaluamos que no sea repetido
                             String nombres = arx[0].getName();
                             String[] arrayNombres = nombres.split("_");
-                            
+                            int cont = 0; 
                             
                             for (int n = 0; n < arrayNombres.length; n++) {
+                                cont += 1;
                                 if (n == 0) {
                                     vendor = arrayNombres[n].toUpperCase();
                                 } else if (n == 1) {
@@ -756,52 +772,57 @@ public class FramePDF extends javax.swing.JFrame {
                                 }
                             }
                             
-                            System.out.println(vendor+" "+factura+" "+compania+": "+registro.validaArchivoExistente(vendor, factura, compania)+"  "+compania.length());
-                            
-                            if (registro.validaArchivoExistente(vendor, factura, compania) == 0) { 
-                                bnArchivoUsado = 0;
-                                if (compania.length() <= 7 ){
-                                    System.out.println(registro.consultaUltimoConsecutivo(compania, factura));
-                                    if (registro.consultaUltimoConsecutivo(compania, factura) == null) {
-                                        consecutivos = "000000";
-                                        //registra();
-                                    } else {
-                                        consecu = registro.consultaUltimoConsecutivo(compania, factura);
-                                        int con = Integer.parseInt(consecu);
-                                        consecutivos = Integer.toString(con + 1);                  
+                            if (cont != 4) {
+                                removePanelPDF();
+                                bnArchivoUsado = 1;
+                                arx[0] = null;
+                                lblIndicadorArx.setText("Nombre del archivo: " + arx[0]);
+                                JOptionPane.showMessageDialog(this, "Revisa que tu archivo contenga:\nVENDOR_FACTURA_CLIENTE_.pdf");
+                            } else {
+                                if (registro.validaArchivoExistente(vendor, factura, compania) == 0) { 
+                                    bnArchivoUsado = 0;
+                                    if (compania.length() <= 7 ){
+                                        System.out.println(registro.consultaUltimoConsecutivo(compania, factura));
+                                        if (registro.consultaUltimoConsecutivo(compania, factura) == null) {
+                                            consecutivos = "000000";
+                                            //registra();
+                                        } else {
+                                            consecu = registro.consultaUltimoConsecutivo(compania, factura);
+                                            int con = Integer.parseInt(consecu);
+                                            consecutivos = Integer.toString(con + 1);                  
 
-                                        if (consecutivos.length() < 6) {
-                                            if (consecutivos.length() == 1) {
-                                                consecutivos = "00000" + consecutivos;
-                                            } else if (consecutivos.length() == 2) {
-                                                consecutivos = "0000" + consecutivos;
-                                            } else if (consecutivos.length() == 3) {
-                                                consecutivos = "000" + consecutivos;
-                                            } else if (consecutivos.length() == 4) {
-                                                consecutivos = "00" + consecutivos;
-                                            } else if (consecutivos.length() == 5) {
-                                                consecutivos = "0" + consecutivos;
+                                            if (consecutivos.length() < 6) {
+                                                if (consecutivos.length() == 1) {
+                                                    consecutivos = "00000" + consecutivos;
+                                                } else if (consecutivos.length() == 2) {
+                                                    consecutivos = "0000" + consecutivos;
+                                                } else if (consecutivos.length() == 3) {
+                                                    consecutivos = "000" + consecutivos;
+                                                } else if (consecutivos.length() == 4) {
+                                                    consecutivos = "00" + consecutivos;
+                                                } else if (consecutivos.length() == 5) {
+                                                    consecutivos = "0" + consecutivos;
+                                                }
                                             }
                                         }
+                                        bnArchivoUsado = 0;
+                                        lblIndicadorArx.setText("Nombre del archivo: " + arx[0]);
+                                        crearVisorFactura(arx[0].getAbsolutePath());
+                                        this.setExtendedState(MAXIMIZED_BOTH);
+                                    }else{
+                                        removePanelPDF();
+                                        bnArchivoUsado = 1;
+                                        arx[0] = null;
+                                        lblIndicadorArx.setText("Nombre del archivo: " + arx[0]);
+                                        JOptionPane.showMessageDialog(this, "Revisa el nombre de tu archivo");                                   
                                     }
-                                    bnArchivoUsado = 0;
-                                    lblIndicadorArx.setText("Nombre del archivo: " + arx[0].getPath());
-                                    crearVisorFactura(arx[0].getAbsolutePath());
-                                    this.setExtendedState(MAXIMIZED_BOTH);
                                 }else{
                                     removePanelPDF();
+                                    lblIndicadorArx.setText("Nombre del archivo: " + arx[0]);
+                                    JOptionPane.showMessageDialog(this, "El archivo ya ah sido usado previamente");
                                     bnArchivoUsado = 1;
-                                    lblIndicadorArx.setText("Nombre del archivo: " + "");
-                                    JOptionPane.showMessageDialog(this, "Revisa el nombre de tu archivo");                                   
-                                }
-                            }else{
-                                removePanelPDF();
-                                lblIndicadorArx.setText("Nombre del archivo: " + "");
-                                JOptionPane.showMessageDialog(this, "El archivo ya ah sido usado previamente");
-                                bnArchivoUsado = 1;
-                            }                           
-                            
-                            //this.setExtendedState(MAXIMIZED_BOTH);
+                                }  
+                            }                        
                         } catch (HeadlessException | IOException e) {
                             setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
                             lblIndicadorArx.setText("Error: " + e);
@@ -1110,6 +1131,7 @@ public class FramePDF extends javax.swing.JFrame {
             //imprime Texto
             over.beginText();
             over.setColorFill(BaseColor.BLACK);
+            over.setColorStroke(BaseColor.BLACK);
             over.setFontAndSize(bf, 7);    // COLOR Y TAMANO
             over.setTextMatrix(x, y);   // set x,y posiCION (0,0)
             over.showText(codigoQr);  // IMPRIME TEXTO
@@ -1123,7 +1145,6 @@ public class FramePDF extends javax.swing.JFrame {
             throw e;
         }
         this.setExtendedState(MAXIMIZED_BOTH);
-        //this.setExtendedState(6);
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
