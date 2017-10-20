@@ -7,6 +7,7 @@ package db;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 /**
  *
  * @author PRR1TL
@@ -14,11 +15,14 @@ import java.sql.ResultSet;
 public class RegistrosDAOImpl extends ConexionBD implements RegistrosDAO{
     private PreparedStatement ps;
     private ResultSet rs;
+    
+     private ArrayList<String> registros;
 
     private final String REGISTRO = "INSERT INTO registros (Vendor, Factura, Compania, consecutivo) VALUES (?,?,?,?)";
     private final String CONSULTA_EXISTENCIA_DOC = "SELECT vendor, factura, compania FROM registros WHERE vendor LIKE ? AND factura LIKE ? AND compania LIKE ?";
     private final String CONSULTA_CONSECUTIVO = "SELECT Max(consecutivo)FROM registros WHERE vendor LIKE ? AND compania LIKE ? ";
     //private final String CONSULTA_CONSECUTIVO = " SELECT Max(consecutivo) AS Expr1 FROM registros WHERE (((registros.[compania]) LIKE ? ) AND ((registros.[factura]) LIKE ? ))";
+    
     @Override
     public void registroFactura(Object[] factura) throws Exception {        
         try {
@@ -83,4 +87,5 @@ public class RegistrosDAOImpl extends ConexionBD implements RegistrosDAO{
         }
         return consecutivo;
     }
+    
 }

@@ -2,7 +2,9 @@ package db;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import javax.swing.JOptionPane;
 
 /**
@@ -12,28 +14,21 @@ import javax.swing.JOptionPane;
  */
 public class ConexionBD {
     
-    protected Connection conexion;
+    Connection conexion = null;
+    String dbName = "DB_Barcode_SQL";
+    String serverip = "SGLERSQL01";
+    String serverport = "1433";
+    String userName = "BCAdmin";
+    String password = "m1ImrgaaXBwRlj7g";
 
-    public Connection getConexion() {
-        return conexion;
-    }
+    String url = "jdbc:sqlserver://"+serverip+"\\SQLEXPRESS:"+serverport+";databaseName="+dbName+";user="+userName+";password="+password+";";
+    String driver = "com.microsoft.sqlserver.jdbc.SQLServerDriver";   
     
-    private final String driverJDBC = "net.ucanaccess.jdbc.UcanaccessDriver";   
-    
-    //URL PRODUCCION
-    //private final String urlDB = "jdbc:ucanaccess://" + "I:/Dept/MOE1/Shared/Informacion_general/proyectos  SG/Proyecto Factura/DB/dbFacturas.accdb";
-    
-    private final String urlDB = "jdbc:ucanaccess://" + "C:/Users/AJN1TL/Desktop/dbFacturas.accdb";
-    
-    //private final String urlDB = "jdbc:ucanaccess://" + "C:/Users/PRR1TL/Desktop/dbFacturas.accdb";
-    
-    //JUAN CARLOS
-    //private final String urlDB = "jdbc:ucanaccess://" + "I:/Dept/MOE1/Restricted/CTG/AP/SG Information/Proveedores 10 años/APM Prueba/db/dbFacturas.accdb";
-    
+   
     public void conectar() throws Exception {
         try {
-            Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
-            conexion = DriverManager.getConnection(urlDB);
+            Class.forName(driver);
+            conexion = DriverManager.getConnection(url);   
         } catch (ClassNotFoundException | SQLException e) {
             throw e;
         }
@@ -49,5 +44,5 @@ public class ConexionBD {
         } catch (SQLException e) {
             throw e;
         }
-    }    
+    }      
 }
