@@ -15,5 +15,5 @@ public interface RegistrosDAO {
     //public void registrarUsuarios(UsuarioDTO usuario) throws Exception;
     public void registroFactura(Object[] registro) throws Exception;
     public int validaArchivoExistente (String vendor, String factura, String compania) throws Exception;
-    public String consultaUltimoConsecutivo (String factura, String compania)throws Exception;
+    public String consultaUltimoConsecutivo ( String compania)throws Exception;
 }

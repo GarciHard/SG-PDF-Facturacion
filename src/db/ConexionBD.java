@@ -12,6 +12,7 @@ import javax.swing.JOptionPane;
  * @author GarciHard
  * @boschUsr GJA5TL
  */
+
 public class ConexionBD {
     
     Connection conexion = null;
@@ -22,9 +23,8 @@ public class ConexionBD {
     String password = "m1ImrgaaXBwRlj7g";
 
     String url = "jdbc:sqlserver://"+serverip+"\\SQLEXPRESS:"+serverport+";databaseName="+dbName+";user="+userName+";password="+password+";";
-    String driver = "com.microsoft.sqlserver.jdbc.SQLServerDriver";   
-    
-   
+    String driver = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
+        
     public void conectar() throws Exception {
         try {
             Class.forName(driver);
@@ -33,6 +33,7 @@ public class ConexionBD {
             throw e;
         }
     }
+    
 
     public void cerrar() throws Exception {
         try {

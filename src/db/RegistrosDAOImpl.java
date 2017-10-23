@@ -8,6 +8,7 @@ package db;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.Arrays;
 /**
  *
  * @author PRR1TL
@@ -16,12 +17,13 @@ public class RegistrosDAOImpl extends ConexionBD implements RegistrosDAO{
     private PreparedStatement ps;
     private ResultSet rs;
     
-     private ArrayList<String> registros;
+    private ArrayList listaRegistros;
 
     private final String REGISTRO = "INSERT INTO registros (Vendor, Factura, Compania, consecutivo) VALUES (?,?,?,?)";
     private final String CONSULTA_EXISTENCIA_DOC = "SELECT vendor, factura, compania FROM registros WHERE vendor LIKE ? AND factura LIKE ? AND compania LIKE ?";
-    private final String CONSULTA_CONSECUTIVO = "SELECT Max(consecutivo)FROM registros WHERE vendor LIKE ? AND compania LIKE ? ";
+    private final String CONSULTA_CONSECUTIVO = "SELECT Max(consecutivo)FROM registros WHERE compania LIKE ? ";
     //private final String CONSULTA_CONSECUTIVO = " SELECT Max(consecutivo) AS Expr1 FROM registros WHERE (((registros.[compania]) LIKE ? ) AND ((registros.[factura]) LIKE ? ))";
+    private final String CONSULTA_REGISTROS = "SELECT * FROM registros";
     
     @Override
     public void registroFactura(Object[] factura) throws Exception {        
@@ -69,13 +71,12 @@ public class RegistrosDAOImpl extends ConexionBD implements RegistrosDAO{
     }
 
     @Override
-    public String consultaUltimoConsecutivo(String compania, String factura) throws Exception {
+    public String consultaUltimoConsecutivo(String compania) throws Exception {
         String consecutivo = "";
         try {
             this.conectar();
             ps = this.conexion.prepareStatement(CONSULTA_CONSECUTIVO);
             ps.setString(1, compania);
-            ps.setString(2, factura);
             rs = ps.executeQuery();
             if (rs.next()){
                 consecutivo = rs.getString(1);
@@ -86,6 +87,34 @@ public class RegistrosDAOImpl extends ConexionBD implements RegistrosDAO{
             throw e;
         }
         return consecutivo;
+    }
+    
+    public ArrayList consultaTotal()throws Exception {
+        Object[] reg;
+        listaRegistros = new ArrayList();
+        
+        try {
+            this.conectar();
+            ps = this.conexion.prepareStatement(CONSULTA_REGISTROS);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                reg = new Object[4];
+                reg[0] = rs.getString(1);
+                reg[1] = rs.getString(2);
+                reg[2] = rs.getString(3);
+                reg[3] = rs.getString(4);
+                listaRegistros.add(reg);
+                System.out.println(Arrays.asList(listaRegistros));
+            }
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            ps.close();
+            rs.close();
+            this.cerrar();
+        }
+        return listaRegistros;        
     }
     
 }

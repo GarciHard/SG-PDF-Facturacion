@@ -106,6 +106,7 @@ public class FramePDF extends javax.swing.JFrame {
     /** Creates new form FramePDF */
     public FramePDF() {
         initComponents();
+        jButton1.setVisible(false);
         pnlEdicionArx.setVisible(false);
         setSize(new Dimension(700, 210));
         this.setLocationRelativeTo(null);
@@ -129,6 +130,7 @@ public class FramePDF extends javax.swing.JFrame {
         pnlIndicadorArx = new javax.swing.JPanel();
         jSeparator1 = new javax.swing.JSeparator();
         lblIndicadorArx = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
         pnlEdicionArx = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         rdbSuperiorIzq = new javax.swing.JRadioButton();
@@ -193,12 +195,21 @@ public class FramePDF extends javax.swing.JFrame {
         lblIndicadorArx.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
         lblIndicadorArx.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
 
+        jButton1.setText("jButton1");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlIndicadorArxLayout = new javax.swing.GroupLayout(pnlIndicadorArx);
         pnlIndicadorArx.setLayout(pnlIndicadorArxLayout);
         pnlIndicadorArxLayout.setHorizontalGroup(
             pnlIndicadorArxLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlIndicadorArxLayout.createSequentialGroup()
-                .addContainerGap(185, Short.MAX_VALUE)
+                .addContainerGap()
+                .addComponent(jButton1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 77, Short.MAX_VALUE)
                 .addComponent(lblIndicadorArx, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
             .addComponent(jSeparator1)
@@ -209,8 +220,10 @@ public class FramePDF extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(13, 13, 13)
-                .addComponent(lblIndicadorArx, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(20, 20, 20))
+                .addGroup(pnlIndicadorArxLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblIndicadorArx, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton1))
+                .addContainerGap())
         );
 
         pnlBackground.add(pnlIndicadorArx, java.awt.BorderLayout.SOUTH);
@@ -738,6 +751,15 @@ public class FramePDF extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_rdbInferiorDerActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        try {
+            registro.consultaTotal();
+        } catch (Exception ex) {
+            Logger.getLogger(FramePDF.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     private void abrirJFileChooser(Component parent, int opcion) {
         fchBuscarFactura = new JFileChooser();
         fchBuscarFactura.setDialogTitle("Buscar Facturas");
@@ -782,12 +804,12 @@ public class FramePDF extends javax.swing.JFrame {
                                 if (registro.validaArchivoExistente(vendor, factura, compania) == 0) { 
                                     bnArchivoUsado = 0;
                                     if (compania.length() <= 7 ){
-                                        System.out.println(registro.consultaUltimoConsecutivo(vendor, compania));
-                                        if (registro.consultaUltimoConsecutivo(vendor, compania) == null) {
+                                        System.out.println(registro.consultaUltimoConsecutivo(compania));
+                                        if (registro.consultaUltimoConsecutivo(compania) == null) {
                                             consecutivos = "000000";
                                             //registra();
                                         } else {
-                                            consecu = registro.consultaUltimoConsecutivo(vendor, compania);
+                                            consecu = registro.consultaUltimoConsecutivo(compania);
                                             int con = Integer.parseInt(consecu);
                                             consecutivos = Integer.toString(con + 1);                  
 
@@ -893,11 +915,11 @@ public class FramePDF extends javax.swing.JFrame {
                     /************EVALUA QUE LOS ARCHIVOS NO HAYAN SIDO MODIFICADOS PREVIAMENTE**************************/
 
                     try {
-                        if (registro.consultaUltimoConsecutivo(vendor, compania) == null) {
+                        if (registro.consultaUltimoConsecutivo(compania) == null) {
                             consecutivos = "000000";
                             registra();
                         } else {
-                            consecu = registro.consultaUltimoConsecutivo(vendor, compania);
+                            consecu = registro.consultaUltimoConsecutivo(compania);
                             int con = Integer.parseInt(consecu);
                             consecutivos = Integer.toString(con + 1);                  
 
@@ -1151,6 +1173,7 @@ public class FramePDF extends javax.swing.JFrame {
     private javax.swing.JButton btnBuscarFactura;
     private javax.swing.JButton btnGuardar;
     private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JButton jButton1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JSeparator jSeparator1;
