@@ -106,7 +106,6 @@ public class FramePDF extends javax.swing.JFrame {
     /** Creates new form FramePDF */
     public FramePDF() {
         initComponents();
-        jButton1.setVisible(false);
         pnlEdicionArx.setVisible(false);
         setSize(new Dimension(700, 210));
         this.setLocationRelativeTo(null);
@@ -755,12 +754,14 @@ public class FramePDF extends javax.swing.JFrame {
         // TODO add your handling code here:
         try {
             registro.consultaTotal();
+            registro.eliminar();
+            registro.consultaTotal();
         } catch (Exception ex) {
             Logger.getLogger(FramePDF.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void abrirJFileChooser(Component parent, int opcion) {
+    private void abrirJFileChooser(Component parent, int opcion){
         fchBuscarFactura = new JFileChooser();
         fchBuscarFactura.setDialogTitle("Buscar Facturas");
         fchBuscarFactura.setFileSelectionMode(opcion);

@@ -16,14 +16,13 @@ import java.util.Arrays;
 public class RegistrosDAOImpl extends ConexionBD implements RegistrosDAO{
     private PreparedStatement ps;
     private ResultSet rs;
-    
-    private ArrayList listaRegistros;
 
     private final String REGISTRO = "INSERT INTO registros (Vendor, Factura, Compania, consecutivo) VALUES (?,?,?,?)";
     private final String CONSULTA_EXISTENCIA_DOC = "SELECT vendor, factura, compania FROM registros WHERE vendor LIKE ? AND factura LIKE ? AND compania LIKE ?";
     private final String CONSULTA_CONSECUTIVO = "SELECT Max(consecutivo)FROM registros WHERE compania LIKE ? ";
     //private final String CONSULTA_CONSECUTIVO = " SELECT Max(consecutivo) AS Expr1 FROM registros WHERE (((registros.[compania]) LIKE ? ) AND ((registros.[factura]) LIKE ? ))";
     private final String CONSULTA_REGISTROS = "SELECT * FROM registros";
+    private final String ELIMINACION = "DELETE FROM registros";
     
     @Override
     public void registroFactura(Object[] factura) throws Exception {        
@@ -89,9 +88,8 @@ public class RegistrosDAOImpl extends ConexionBD implements RegistrosDAO{
         return consecutivo;
     }
     
-    public ArrayList consultaTotal()throws Exception {
-        Object[] reg;
-        listaRegistros = new ArrayList();
+    public String consultaTotal()throws Exception {
+        String regis = "";
         
         try {
             this.conectar();
@@ -99,13 +97,8 @@ public class RegistrosDAOImpl extends ConexionBD implements RegistrosDAO{
             rs = ps.executeQuery();
 
             while (rs.next()) {
-                reg = new Object[4];
-                reg[0] = rs.getString(1);
-                reg[1] = rs.getString(2);
-                reg[2] = rs.getString(3);
-                reg[3] = rs.getString(4);
-                listaRegistros.add(reg);
-                System.out.println(Arrays.asList(listaRegistros));
+                regis = rs.getString(1)+","+rs.getString(2)+","+rs.getString(3)+","+rs.getString(4); ;
+                System.out.println("reg "+regis);
             }
         } catch (Exception e) {
             throw e;
@@ -114,7 +107,20 @@ public class RegistrosDAOImpl extends ConexionBD implements RegistrosDAO{
             rs.close();
             this.cerrar();
         }
-        return listaRegistros;        
+        return regis;        
+    }
+    
+    public void eliminar () throws Exception {
+        try {
+            this.conectar();
+            ps = this.conexion.prepareStatement(ELIMINACION);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            this.cerrar();
+            ps.close();
+        }
     }
     
 }
