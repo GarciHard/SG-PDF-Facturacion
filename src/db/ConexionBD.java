@@ -34,7 +34,6 @@ public class ConexionBD {
         }
     }
     
-
     public void cerrar() throws Exception {
         try {
             if (conexion != null) {

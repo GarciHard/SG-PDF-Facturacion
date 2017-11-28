@@ -88,10 +88,14 @@ public class FramePDF extends javax.swing.JFrame {
     
     PdfStamper stamper ;
     
+    String userHome = "user.home";
+    String path = System.getProperty(userHome);
+    
     /*****************RUTAS DE GUARDADO **********************/
     //File folder = new File ("C:/Users/PRR1TL/Desktop/NEW 69C0");
-    File folder = new File ("C:/Users/AJN1TL/Desktop/NEW 69C0");
+    //File folder = new File ("C:/Users/AJN1TL/Desktop/NEW 69C0");
     //File folder = new File("I:/Dept/MOE1/Restricted/CTG/AP/SG Information/Proveedores 10 años/APM Prueba");
+    File folder = new File (path+"/Documents/Barcode QR");
     File folderServer = new File(folder+"/68F0");
     File folderManufacturing = new File(folder+"/68D0");
     File folderLLC = new File(folder+"/69C0");
@@ -106,6 +110,7 @@ public class FramePDF extends javax.swing.JFrame {
     /** Creates new form FramePDF */
     public FramePDF() {
         initComponents();
+        jButton1.setVisible(false);
         pnlEdicionArx.setVisible(false);
         setSize(new Dimension(700, 210));
         this.setLocationRelativeTo(null);
@@ -754,8 +759,8 @@ public class FramePDF extends javax.swing.JFrame {
         // TODO add your handling code here:
         try {
             registro.consultaTotal();
-            registro.eliminar();
-            registro.consultaTotal();
+            //registro.eliminar();
+            //registro.consultaTotal();
         } catch (Exception ex) {
             Logger.getLogger(FramePDF.class.getName()).log(Level.SEVERE, null, ex);
         }
