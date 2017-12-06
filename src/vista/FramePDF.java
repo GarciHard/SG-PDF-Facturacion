@@ -949,7 +949,7 @@ public class FramePDF extends javax.swing.JFrame {
                     /*********************PINTA QR ******************/
                         for (int pag = 0; pag <= reader.getNumberOfPages(); pag++) {
                             if (pag == 1) {
-                                codigoQr = compania + "-" + consecutivos;
+                                codigoQr = compania + consecutivos;
                                 generaQr();
                                 PdfContentByte over = stamper.getOverContent(pag);
 
@@ -970,8 +970,8 @@ public class FramePDF extends javax.swing.JFrame {
                                 over.beginText();
                                 over.setColorFill(BaseColor.BLACK);
                                 over.setFontAndSize(bf, 7);    // COLOR Y TAMANO
-                                over.setTextMatrix(550, 5);   // set x,y posiCION (0,0)
-                                over.showText(codigoQr);  // IMPRIME TEXTO
+                                over.setTextMatrix(530, 5);   // set x,y posiCION (0,0)
+                                over.showText("Barcode: "+codigoQr);  // IMPRIME TEXTO
                                 over.endText();
                             }
                         }
